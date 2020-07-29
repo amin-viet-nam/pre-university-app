@@ -1,0 +1,12 @@
+{
+  "name": "PreUniversityExamination",
+  "displayName": "PreUniversityExamination",
+  "expo": {
+    "name": "PreUniversityExamination",
+    "slug": "PreUniversityExamination",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

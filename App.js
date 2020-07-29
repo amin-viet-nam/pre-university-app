@@ -1,34 +1,12 @@
 import { AppLoading } from 'expo';
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Constants from 'expo-constants';
-import * as firebase from 'firebase';
 import { Button, WhiteSpace } from '@ant-design/react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import MyTabs from './src/Components/TabBarComponent';
 import * as Font from 'expo-font';
-
-
-// import BasicTabBarExample from './src/Components/TabBarComponent'
-
-const config = {
-  apiKey: "AIzaSyDsJvZ8qvEILK1DrwWPVzJftyRvpprbtdw",
-  authDomain: "amin-preuniversity-examination.firebaseapp.com",
-  databaseURL: "https://amin-preuniversity-examination.firebaseio.com",
-  projectId: "amin-preuniversity-examination",
-  storageBucket: "amin-preuniversity-examination.appspot.com",
-  messagingSenderId: "652459301860",
-  appId: "1:652459301860:web:cd0c80f5952007e0da45f1",
-  measurementId: "G-FZN7B9F058"
-};
-
-try {
-  if (!firebase.apps.length) {
-    firebase.initializeApp(config);
-  }
-} catch (e) {
-  console.error('App reloaded, so firebase did not re-initialize', e);
-}
 
 export default class App extends Component {
   state = {
@@ -54,19 +32,14 @@ export default class App extends Component {
       return <AppLoading />;
     }
     return (
-      <NavigationContainer>
-        <MyTabs/>
-      </NavigationContainer>
-      
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <MyTabs/>
+        </NavigationContainer>
+      </SafeAreaProvider>
     );
   }
 }
-
-  //     {/* // <View> */}
-  //     <View style={styles.container}>
-  //     <CounterContainer />
-  //   </View>
-  // {/* // </View> */}
 
 // class CounterContainer extends Component {
 //   state = {
@@ -113,17 +86,3 @@ export default class App extends Component {
 //     });
 //   };
 // }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  counterText: {
-    fontSize: 20,
-    marginBottom: 10,
-  },
-});

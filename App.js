@@ -1,12 +1,12 @@
 import { AppLoading } from 'expo';
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Constants from 'expo-constants';
-import { Button, WhiteSpace } from '@ant-design/react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import MyTabs from './src/Components/TabBarComponent';
+import { createStackNavigator } from '@react-navigation/stack';
+import HomeScreen from './src/Screens/HomeScreen';
 import * as Font from 'expo-font';
+
+const Stack = createStackNavigator();
 
 export default class App extends Component {
   state = {
@@ -34,7 +34,9 @@ export default class App extends Component {
     return (
       <SafeAreaProvider>
         <NavigationContainer>
-          <MyTabs/>
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+          </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>
     );
@@ -74,15 +76,5 @@ export default class App extends Component {
 //     );
 //   }
 
-//   _increaseCount = () => {
-//     firebase.database().ref('counter').set({
-//       count: (this.props.count || 0) + 1,
-//     });
-//   };
-
-//   _decreaseCount = () => {
-//     firebase.database().ref('counter').set({
-//       count: (this.props.count || 0) - 1,
-//     });
 //   };
 // }

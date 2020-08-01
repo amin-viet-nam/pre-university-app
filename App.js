@@ -3,8 +3,14 @@ import React, { Component } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from './src/Screens/HomeScreen';
 import * as Font from 'expo-font';
+import NavigatorService from './src/Services/NavigatorService';
+
+import HomeScreen from './src/Screens/HomeScreen';
+import CategoryDetailScreen from './src/Screens/CategoryDetailScreen';
+import QuestionScreen from './src/Screens/QuestionScreen';
+
+import AboutMeScreen from './src/Screens/AboutMeScreen';
 
 const Stack = createStackNavigator();
 
@@ -33,9 +39,12 @@ export default class App extends Component {
     }
     return (
       <SafeAreaProvider>
-        <NavigationContainer>
+        <NavigationContainer ref={(el) => NavigatorService.setContainer(el)}>
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+            <Stack.Screen name="CategoryDetailScreen" component={CategoryDetailScreen}/>
+            <Stack.Screen name="QuestionScreen" component={QuestionScreen}/>
+            <Stack.Screen name="AboutMeScreen" component={AboutMeScreen}/>
           </Stack.Navigator>
         </NavigationContainer>
       </SafeAreaProvider>

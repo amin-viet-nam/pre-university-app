@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet, Text, FlatList, View } from 'react-native';
+import { Text, FlatList, View } from 'react-native';
 import {Card} from 'react-native-elements';
 import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from 'react-native-vector-icons';
@@ -11,30 +11,39 @@ export default class CategoryScreen extends React.Component {
         super(props);
         this.state = {
             categoryList: [{
+                "id": "math",
                 "icon" : "math-compass",
                 "text" : "Toán Học"
               }, {
+                "id": "physical",
                 "icon" : "thermometer",
                 "text" : "Vật Lý"
               }, {
+                "id": "chemistry",
                 "icon" : "flask",
                 "text" : "Hóa Học"
               }, {
+                "id": "literary",
                 "icon" : "book-open",
                 "text" : "Ngữ Văn"
               }, {
+                "id" : "history",
                 "icon" : "history",
                 "text" : "Lịch Sử"
               }, {
+                "id": "geography",
                 "icon" : "earth",
                 "text" : "Địa Lý"
               }, {
+                "id" : "english",
                 "icon" : "table",
                 "text" : "Tiếng Anh"
               }, {
+                "id": "biological",
                 "icon" : "human",
                 "text" : "Sinh Học"
               }, {
+                "id": "civic-education",
                 "icon" : "teach",
                 "text" : "GDCD"
               }]
@@ -49,9 +58,11 @@ export default class CategoryScreen extends React.Component {
     render() {
         const {categoryList} = this.state;
         return (
-          <SafeAreaView style={{ justifyContent: 'center', flex: 1, padding: 4, backgroundColor: '#ffb2dd' }}>
+          <SafeAreaView style={{ justifyContent: 'center', flex: 1, padding: 4, backgroundColor: '#f8bbd0' }}>
             <FlatList
               data={categoryList}
+              numColumns={2}
+              keyExtractor={(item, index) => index}
               renderItem={({ item, index }) => (
                 <View style={{ flex: 1, flexDirection: 'column', margin: 4}}>
                     <Card
@@ -67,8 +78,6 @@ export default class CategoryScreen extends React.Component {
                     </Card>
                 </View>
               )}
-              numColumns={2}
-              keyExtractor={(item, index) => index}
             />
           </SafeAreaView>
         );

@@ -4,6 +4,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font';
+import Spinner from 'react-native-loading-spinner-overlay';
+import {AppContext} from './src/Contexts/AppContext';
+
 import NavigatorService from './src/Services/NavigatorService';
 
 import HomeScreen from './src/Screens/HomeScreen';
@@ -16,7 +19,13 @@ const Stack = createStackNavigator();
 
 export default class App extends Component {
   state = {
-    isReady: false
+    isReady: false,
+    loading: false,
+    setLoading: (loading) => {
+      if(this.state.loading !== loading) {
+        this.setState({ loading });
+      }
+    }
   };
 
   async componentDidMount() {
@@ -39,14 +48,22 @@ export default class App extends Component {
     }
     return (
       <SafeAreaProvider>
-        <NavigationContainer ref={(el) => NavigatorService.setContainer(el)}>
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
-            <Stack.Screen name="CategoryDetailScreen" component={CategoryDetailScreen}/>
-            <Stack.Screen name="QuestionScreen" component={QuestionScreen}/>
-            <Stack.Screen name="AboutMeScreen" component={AboutMeScreen}/>
-          </Stack.Navigator>
-        </NavigationContainer>
+        <AppContext.Provider value={this.state}>
+          <NavigationContainer ref={(el) => NavigatorService.setContainer(el)}>
+            <Stack.Navigator initialRouteName="Home">
+              <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+              <Stack.Screen name="CategoryDetailScreen" component={CategoryDetailScreen}/>
+              <Stack.Screen name="QuestionScreen" component={QuestionScreen}/>
+              <Stack.Screen name="AboutMeScreen" component={AboutMeScreen}/>
+            </Stack.Navigator>
+          </NavigationContainer>
+          <Spinner
+              visible={this.state.loading}
+              textStyle={{color: '#fff'}}
+              cancelable={true}
+              textContent={'Đang Tải...'}
+            />          
+        </AppContext.Provider>
       </SafeAreaProvider>
     );
   }

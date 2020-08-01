@@ -4,6 +4,8 @@ import { Text, FlatList, View } from 'react-native';
 import {Card} from 'react-native-elements';
 import Ripple from 'react-native-material-ripple';
 import NavigatorService from '../../src/Services/NavigatorService';
+import {AppContext} from '../Contexts/AppContext';
+import firebase from '../DataStorages/FirebaseApp';
 
 export default class CategoryDetailScreen extends React.Component {
     constructor(props) {
@@ -49,7 +51,7 @@ export default class CategoryDetailScreen extends React.Component {
         const params = this.props.route.params;
         this.state = {
             detail: params.item,
-            categoryDetailList: [{id: 1}, {id: 2}, {id: 3}, {id: 20, done: true}],
+            categoryDetailList: [],
             layoutColor: colorMap[params.item.id] || {
                     "primaryColor": "#c8e6c9",
                     "secondaryColor": "#f1f8e9"
@@ -65,30 +67,40 @@ export default class CategoryDetailScreen extends React.Component {
     }
 
     componentDidMount() {
-        // firebase.database().ref('categories')
-        //     .once('value', snapshot => {
-        //         if (snapshot.val()) {
-        //             this.setState({
-        //                 categoryDetailList: snapshot.val()
-        //             }); 
-        //         } else {
-        //             this.setState({
-        //                 categoryDetailList: [{icon: 'https://cdn0.iconfinder.com/data/icons/shift-free/32/Error-512.png', text: 'Lỗi 500: Chưa cấu hình categories'}]
-        //             });                    
-        //         }
-        //     });
+        this.context.setLoading(true);
+
+        firebase.database().ref('categories')
+            .once('value', snapshot => {
+                this.context.setLoading(false);
+                if (snapshot.val()) {
+                    this.setState({
+                        categoryDetailList: snapshot.val()
+                    }); 
+                } else {
+                    this.setState({
+                        categoryDetailList: [{id: 'categories-not-found', selectable: false, text: 'Đã xảy ra lỗi vui lòng liên hệ quản trị'}]
+                    });                    
+                }
+            });
     }
 
-
     categoryItemOnClick(item) {
-        console.log('categoryItemOnClick: ', item);
-        NavigatorService.navigate('CategoryDetailScreen', {item});
+        if (item.selectable === false) {
+            
+        } else { 
+            NavigatorService.navigate('AboutMeScreen', {item});
+        }
       }
   
       render() {
           const {categoryDetailList, layoutColor} = this.state;
           return (
             <SafeAreaView style={{ justifyContent: 'center', flex: 1, padding: 4, backgroundColor: layoutColor.secondaryColor }}>
+                <AppContext.Consumer>
+                    {({loading, setLoading}) => {
+                        // setLoading(this.state.loading)
+                    }}
+                </AppContext.Consumer>
               <FlatList
                 data={categoryDetailList}
                 numColumns={3}
@@ -112,3 +124,4 @@ export default class CategoryDetailScreen extends React.Component {
           );
         }   
 }
+CategoryDetailScreen.contextType = AppContext;

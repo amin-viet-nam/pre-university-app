@@ -3,10 +3,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, FlatList, View, Alert, Dimensions } from 'react-native';
 import {Card} from 'react-native-elements';
 import Ripple from 'react-native-material-ripple';
-import ViewPager from '@react-native-community/viewpager';
+import { Layout, ViewPager } from '@ui-kitten/components';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {AppContext} from '../Contexts/AppContext';
 import firebase from '../DataStorages/FirebaseApp';
+import HTML from "react-native-render-html";
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default class QuestionScreen extends React.Component {
     constructor(props) {
@@ -39,6 +41,9 @@ export default class QuestionScreen extends React.Component {
             headerTintColor: '#212121',
             headerStyle: {
                 backgroundColor: '#f8bbd0'
+            },
+            cardStack: {
+              gesturesEnabled: false,
             }
         });
     }
@@ -71,6 +76,14 @@ export default class QuestionScreen extends React.Component {
             });
     }
 
+    handleEndQuestion() {
+      Alert.alert('Thông báo', 'Xin Chào');
+    }
+
+    gotoPage(page) {
+      this.setState({currentPage: page})
+    }
+
     renderBookMark() {
       const {categoryDetailItem, currentPage} = this.state;
       if (!categoryDetailItem) {
@@ -87,6 +100,7 @@ export default class QuestionScreen extends React.Component {
             renderItem={({item, index}) => {
               return (
                 <View 
+                  key={`bookmark-item-${index}`}
                   style={{
                       backgroundColor: index === currentPage ? "#f48fb1" : "#a4a4a4",
                       width: 25,
@@ -95,8 +109,8 @@ export default class QuestionScreen extends React.Component {
                       justifyContent: "center"
                   }}>
                   <Ripple 
-                    onPress={() => {
-                      this._viewPage.setPage(index);
+                    onPressIn={() => {
+                      this.gotoPage(index);
                     }}
                   >
                     <Text style={{textAlign: 'center', color: '#fff'}}>{index + 1}</Text>
@@ -118,12 +132,12 @@ export default class QuestionScreen extends React.Component {
 
       const questions = categoryDetailItem.questions;
       return (
-        <View style={{backgroundColor: '#f06292', flexDirection: 'row', padding: 4}}>
+        <View style={{backgroundColor: '#f06292', flexDirection: 'row', padding: 12}}>
           <View style={{flex: 1}}>
             <Ripple 
               onPress={() => {
                 if (currentPage > 0) {
-                  this._viewPage.setPage(currentPage - 1);
+                  this.gotoPage(currentPage - 1);
                 }
               }}
             >
@@ -136,7 +150,7 @@ export default class QuestionScreen extends React.Component {
           <View style={{flex: 4}}>
             <Ripple 
               onPress={() => {
-                
+                this.handleEndQuestion()
               }}
             >
               <View style={{flexDirection: 'row',justifyContent: 'center', alignItems: 'center'}}>
@@ -148,8 +162,8 @@ export default class QuestionScreen extends React.Component {
           <View style={{flex: 1, }}>
             <Ripple 
               onPress={() => {
-                if (currentPage < questions.length) {
-                  this._viewPage.setPage(currentPage + 1);
+                if (currentPage < questions.length - 1) {
+                  this.gotoPage(currentPage + 1);
                 }
               }}
             >
@@ -170,20 +184,38 @@ export default class QuestionScreen extends React.Component {
       }
       const questions = categoryDetailItem.questions;  
       return (
-        <View style={{padding: 4, flex: 1}}>
+        <View style={{padding: 4, flex: 1,  backgroundColor: '#fafafa'}}>
           <ViewPager 
             ref={(ref) => this._viewPage = ref}
             style={{flex: 1}} 
-            initialPage={0}
-            onPageSelected={(e) => {
-              this.setState({currentPage: e.nativeEvent.position});
+            selectedIndex={currentPage}
+            shouldLoadComponent={(index) => index === currentPage}
+            onSelect={index => {
+              this.setState({currentPage: index});
             }}
           >
-            {questions.map((item, index) => {
+            {questions.map((item, questionIndex) => {
               return (
-                <Text>
-                  current page: {index}
-                </Text>
+                <Layout key={`viewpage-item-${questionIndex}`}  style={{flex: 1,  backgroundColor: '#fafafa'}}>
+                  <ScrollView style={{flex: 1}}>
+                    <HTML
+                      baseFontStyle={{fontSize: 20}}
+                      html={item.ask}
+                      imagesMaxWidth={Dimensions.get("window").width}
+                    />
+                    {item.choices.map((choice, choiceIndex) => {
+                      return (
+                        <View key={`question-choice-${item.id}-${choiceIndex}`}>
+                          <HTML
+                            baseFontStyle={{fontSize: 18}}
+                            html={choice}
+                            imagesMaxWidth={Dimensions.get("window").width}
+                          />
+                        </View>
+                      )
+                    })}
+                  </ScrollView>
+                </Layout>
               )
             })}
           </ViewPager>
@@ -197,11 +229,13 @@ export default class QuestionScreen extends React.Component {
           return (<Text>Đang tải dữ liệu ...</Text>)
         }
         return (
-          <SafeAreaView style={{ flex: 1}}>
-            {this.renderBookMark()}
-            {this.renderViewPage()}
+          <View style={{flex: 1}}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#fafafa'}}>
+              {this.renderBookMark()}
+              {this.renderViewPage()}
+            </SafeAreaView>
             {this.renderBottomBar()}
-          </SafeAreaView>
+          </View>
         );
       }   
 }

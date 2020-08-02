@@ -33,7 +33,8 @@ export default class QuestionScreen extends React.Component {
         this.state = {
           categoryItem: categoryItem,
           categoryDetailItem: null,
-          currentPage: 0
+          currentPage: 0,
+          lastGotoPageTime: new Date().getTime()
         };
         
         this.props.navigation.setOptions({
@@ -81,7 +82,12 @@ export default class QuestionScreen extends React.Component {
     }
 
     gotoPage(page) {
-      this.setState({currentPage: page})
+      const currentTime = new Date().getTime();
+      if(currentTime - this.state.lastGotoPageTime > 1000) {
+        this.setState({currentPage: page, lastGotoPageTime: currentTime})
+      } else {
+        Alert.alert('Thông báo', 'Bạn thực hiện thao tác quá nhanh , Vui lòng thực hiện chậm lại');
+      }
     }
 
     renderBookMark() {

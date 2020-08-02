@@ -42,9 +42,10 @@ export default class QuestionScreen extends React.Component {
             headerStyle: {
                 backgroundColor: '#f8bbd0'
             },
-            cardStack: {
-              gesturesEnabled: false,
-            }
+            gestureResponseDistance: {
+              horizontal: -1,
+              vertical: -1,
+            },
         });
     }
 
@@ -82,7 +83,7 @@ export default class QuestionScreen extends React.Component {
 
     gotoPage(page) {
       const currentTime = new Date().getTime();
-      if(currentTime - this.state.lastGotoPageTime > 1000) {
+      if(currentTime - this.state.lastGotoPageTime > 700) {
         this.setState({currentPage: page, lastGotoPageTime: currentTime})
       } else {
         Alert.alert('Thông báo', 'Bạn thực hiện thao tác quá nhanh , Vui lòng thực hiện chậm lại');
@@ -194,14 +195,17 @@ export default class QuestionScreen extends React.Component {
             ref={(ref) => this._viewPage = ref}
             style={{flex: 1}} 
             selectedIndex={currentPage}
-            shouldLoadComponent={(index) => index === currentPage}
+            shouldLoadComponent={(index) => {
+              const diff = index - currentPage;
+              return diff >= -1 && diff <= 1
+            }}
             onSelect={index => {
               this.setState({currentPage: index});
             }}
           >
             {questions.map((item, questionIndex) => {
               return (
-                <Layout key={`viewpage-item-${questionIndex}`}  style={{flex: 1,  backgroundColor: '#fafafa'}}>
+                <Layout key={`viewpage-item-${questionIndex}`}  style={{flex: 1,  backgroundColor: '#fafafa', margin: 4}}>
                   <ScrollView style={{flex: 1}}>
                     <HTML
                       baseFontStyle={{fontSize: 20}}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, FlatList, View } from 'react-native';
+import { Text, FlatList, View, Alert } from 'react-native';
 import {Card} from 'react-native-elements';
 import Ripple from 'react-native-material-ripple';
 import NavigatorService from '../../src/Services/NavigatorService';
@@ -50,7 +50,7 @@ export default class CategoryDetailScreen extends React.Component {
         };
         const params = this.props.route.params;
         this.state = {
-            detail: params.item,
+            categoryDetail: params.item,
             categoryDetailList: [],
             layoutColor: colorMap[params.item.id] || {
                     "primaryColor": "#c8e6c9",
@@ -58,7 +58,7 @@ export default class CategoryDetailScreen extends React.Component {
                 }
         };
         this.props.navigation.setOptions({
-            title: "Giải Đề " + this.state.detail.text, 
+            title: "Giải Đề " + this.state.categoryDetail.text, 
             headerTintColor: '#212121',
             headerStyle: {
                 backgroundColor: this.state.layoutColor.primaryColor
@@ -69,59 +69,64 @@ export default class CategoryDetailScreen extends React.Component {
     componentDidMount() {
         this.context.setLoading(true);
 
-        firebase.database().ref('categories')
+        firebase.database().ref(`categories/${this.state.categoryDetail.id}`)
             .once('value', snapshot => {
                 this.context.setLoading(false);
                 if (snapshot.val()) {
+                    const categoryDetailObj = snapshot.val();
                     this.setState({
-                        categoryDetailList: snapshot.val()
+                        categoryDetailList: Object.keys(categoryDetailObj)
+                            .map(k => categoryDetailObj[k])
+                            .filter(f => f.hide !== true)
+                            .map(m => ({
+                                id: m.id,
+                                category: this.state.categoryDetail.id,
+                                name: m.name,
+                                hide: m.hide === true,
+                            }))
                     }); 
                 } else {
                     this.setState({
-                        categoryDetailList: [{id: 'categories-not-found', selectable: false, text: 'Đã xảy ra lỗi vui lòng liên hệ quản trị'}]
-                    });                    
+                        categoryDetailList: []
+                    }, () => {
+                        setTimeout(() => {
+                            Alert.alert('Thông báo', 'Chưa có đề thi phù hợp với truy vấn, Vui lòng quay lại sau')
+                        }, 100);
+                    });      
                 }
             });
     }
 
-    categoryItemOnClick(item) {
-        if (item.selectable === false) {
-            
-        } else { 
-            NavigatorService.navigate('AboutMeScreen', {item});
-        }
+    categoryDetailItemClick(item) {
+        console.log('categoryDetailItemClick', item);
+        NavigatorService.navigate('QuestionScreen', {item});
       }
-  
-      render() {
-          const {categoryDetailList, layoutColor} = this.state;
-          return (
-            <SafeAreaView style={{ justifyContent: 'center', flex: 1, padding: 4, backgroundColor: layoutColor.secondaryColor }}>
-                <AppContext.Consumer>
-                    {({loading, setLoading}) => {
-                        // setLoading(this.state.loading)
-                    }}
-                </AppContext.Consumer>
-              <FlatList
-                data={categoryDetailList}
-                numColumns={3}
-                keyExtractor={(item, index) => index}
-                renderItem={({ item, index }) => (
-                  <View style={{ flex: 1, flexDirection: 'column', margin: 4}}>
-                      <Card
-                        containerStyle={{margin: 4, backgroundColor: layoutColor.primaryColor, borderRadius: 8, 
-                        shadowColor: "#000", shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5,}}
-                      >
-                        <Ripple style={{padding: 16}} onPress={ () => this.categoryItemOnClick(item)}>
-                          <Text style={{fontSize: 20, textAlign: 'center', color: '#212121'}}>
-                              Đề thi số {item.id}
-                          </Text>
-                        </Ripple>
-                      </Card>
-                  </View>
-                )}
-              />
-            </SafeAreaView>
-          );
-        }   
+
+    render() {
+        const {categoryDetailList, layoutColor} = this.state;
+        return (
+        <SafeAreaView style={{ justifyContent: 'center', flex: 1, padding: 4, backgroundColor: layoutColor.secondaryColor }}>
+            <FlatList
+            data={categoryDetailList}
+            numColumns={3}
+            keyExtractor={(item, index) => index}
+            renderItem={({ item }) => (
+                <View style={{ flex: 1, flexDirection: 'column', margin: 4}}>
+                    <Card
+                    containerStyle={{margin: 4, backgroundColor: layoutColor.primaryColor, borderRadius: 8, 
+                    shadowColor: "#000", shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5,}}
+                    >
+                    <Ripple style={{padding: 16}} onPress={ () => this.categoryDetailItemClick(item)}>
+                        <Text style={{fontSize: 20, textAlign: 'center', color: '#212121'}}>
+                            Đề thi {item.name}
+                        </Text>
+                    </Ripple>
+                    </Card>
+                </View>
+            )}
+            />
+        </SafeAreaView>
+        );
+    }   
 }
 CategoryDetailScreen.contextType = AppContext;

@@ -1,5 +1,6 @@
 import { AppLoading } from 'expo';
 import React, { Component } from 'react';
+import {Alert} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,6 +11,7 @@ import {AppContext} from './src/Contexts/AppContext';
 import NavigatorService from './src/Services/NavigatorService';
 
 import HomeScreen from './src/Screens/HomeScreen';
+import CategoryScreen from './src/Screens/CategoryScreen';
 import CategoryDetailScreen from './src/Screens/CategoryDetailScreen';
 import QuestionScreen from './src/Screens/QuestionScreen';
 
@@ -52,6 +54,7 @@ export default class App extends Component {
           <NavigationContainer ref={(el) => NavigatorService.setContainer(el)}>
             <Stack.Navigator initialRouteName="Home">
               <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+              <Stack.Screen name="CategoryScreen" component={CategoryScreen}/>
               <Stack.Screen name="CategoryDetailScreen" component={CategoryDetailScreen}/>
               <Stack.Screen name="QuestionScreen" component={QuestionScreen}/>
               <Stack.Screen name="AboutMeScreen" component={AboutMeScreen}/>

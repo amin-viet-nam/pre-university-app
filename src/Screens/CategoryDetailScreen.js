@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, FlatList, View, Alert } from 'react-native';
-import {Card} from 'react-native-elements';
+import { Card } from '@ui-kitten/components';
 import Ripple from 'react-native-material-ripple';
 import NavigatorService from '../../src/Services/NavigatorService';
 import {AppContext} from '../Contexts/AppContext';
@@ -113,7 +113,7 @@ export default class CategoryDetailScreen extends React.Component {
             renderItem={({ item }) => (
                 <View style={{ flex: 1, flexDirection: 'column', margin: 4}}>
                     <Card
-                    containerStyle={{margin: 4, backgroundColor: layoutColor.primaryColor, borderRadius: 8, 
+                    style={{margin: 4, backgroundColor: layoutColor.primaryColor, borderRadius: 4, 
                     shadowColor: "#000", shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5,}}
                     >
                     <Ripple style={{padding: 16}} onPress={ () => this.categoryDetailItemClick(item)}>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, FlatList, View, Alert, Dimensions } from 'react-native';
-import {Card} from 'react-native-elements';
 import Ripple from 'react-native-material-ripple';
 import { Layout, ViewPager } from '@ui-kitten/components';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -213,7 +212,7 @@ export default class QuestionScreen extends React.Component {
                       return (
                         <View key={`question-choice-${item.id}-${choiceIndex}`}>
                           <HTML
-                            baseFontStyle={{fontSize: 18}}
+                            baseFontStyle={{fontSize: 19}}
                             html={choice}
                             imagesMaxWidth={Dimensions.get("window").width}
                           />

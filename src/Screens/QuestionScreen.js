@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text, FlatList, View, Alert, Dimensions } from 'react-native';
 import Ripple from 'react-native-material-ripple';
-import { Layout, ViewPager } from '@ui-kitten/components';
+import { ViewPager } from '@ui-kitten/components';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {AppContext} from '../Contexts/AppContext';
 import firebase from '../DataStorages/FirebaseApp';
-import HTML from "react-native-render-html";
-import { ScrollView } from 'react-native-gesture-handler';
+import QuestionItemComponent from '../Components/QuestionItemComponent';
 
 export default class QuestionScreen extends React.Component {
     constructor(props) {
@@ -33,7 +32,10 @@ export default class QuestionScreen extends React.Component {
           categoryItem: categoryItem,
           categoryDetailItem: null,
           currentPage: 0,
-          lastGotoPageTime: new Date().getTime()
+          lastGotoPageTime: new Date().getTime(),
+          answeredQuestions: {},
+          autoEndQuestion: true,
+          showAllAnswers: false,
         };
         
         this.props.navigation.setOptions({
@@ -77,8 +79,112 @@ export default class QuestionScreen extends React.Component {
             });
     }
 
-    handleEndQuestion() {
-      Alert.alert('Thông báo', 'Xin Chào');
+    handleEndAllQuestion() {
+      const {categoryDetailItem, answeredQuestions} = this.state;
+      const questions = categoryDetailItem.questions;
+      const pointPerCorrectAnswer = 10 / questions.length;
+      const correctAnswer = Object.keys(answeredQuestions)
+                              .filter(f => answeredQuestions[f] === questions[f].answer)
+                              .length;
+      const totalScore = Math.round((pointPerCorrectAnswer * correctAnswer + Number.EPSILON) * 100) / 100
+
+      this.setState({
+        showAllAnswers: true
+      }, () => {
+        Alert.alert('Chấm điểm', `Điểm số của bạn là : ${totalScore}`);
+      });
+    }
+
+    getNextNotAnsweredQuestion() {
+      const {answeredQuestions, categoryDetailItem, currentPage} = this.state;
+
+      let nextPage = -1;
+      for(let i=currentPage + 1; i < categoryDetailItem.questions.length; i++) {
+        if (typeof answeredQuestions[i] === 'undefined') {
+          nextPage = i;
+          break;
+        }
+      }
+      
+      if (nextPage === -1) {
+        for(let i=0; i < currentPage; i++) {
+          if (typeof answeredQuestions[i] === 'undefined') {
+            nextPage = i;
+            break;
+          }
+        }        
+      }
+      return nextPage;
+    }
+
+    handleQuestionAnswerSelected(questionItem, questionIndex, selectedAnswerIndex) {
+      const {answeredQuestions, currentPage} = this.state;
+      const nextPage = this.getNextNotAnsweredQuestion();
+      
+      this.setState({
+        answeredQuestions: {
+          ...answeredQuestions,
+          [questionIndex]: selectedAnswerIndex
+        },
+        currentPage: nextPage !== -1 ? nextPage: currentPage
+      }, () => {
+        if (nextPage === -1 && this.state.autoEndQuestion) {
+          this.showAlertEndQuestionConfirm();
+        }
+      });
+    }
+
+    showAlertEndQuestionConfirm() {
+      const nextPage = this.getNextNotAnsweredQuestion();
+      if (nextPage !== -1) {
+        Alert.alert(
+          "Cảnh báo",
+          "Bạn còn câu hỏi chưa hoàn thành, Bạn có muốn nộp bài thi chưa ?",
+          [
+            {
+              text: "Làm tiếp nha",
+              onPress: () => {
+                this.setState({
+                  autoEndQuestion: false
+                })
+              },
+              style: "cancel"
+            },
+            { text: "Nộp bài thi", onPress: () => {
+              this.setState({
+                autoEndQuestion: false
+              }, () => {
+                this.handleEndAllQuestion();
+              })
+            }}
+          ],
+          { cancelable: false }
+        );      
+      } else {
+        Alert.alert(
+          "Thông báo",
+          "Bạn sẵn sàng nộp bài thi để chấm điểm chưa ?",
+          [
+            {
+              text: "Chưa sẵn sàng",
+              onPress: () => {
+                this.setState({
+                  autoEndQuestion: false
+                })
+              },
+              style: "cancel"
+            },
+            { text: "Chấm điểm", onPress: () => {
+              this.setState({
+                autoEndQuestion: false
+              }, () => {
+                this.handleEndAllQuestion();
+              })
+            }}
+          ],
+          { cancelable: false }
+        );      
+      }
     }
 
     gotoPage(page) {
@@ -91,7 +197,7 @@ export default class QuestionScreen extends React.Component {
     }
 
     renderBookMark() {
-      const {categoryDetailItem, currentPage} = this.state;
+      const {categoryDetailItem, currentPage, answeredQuestions, showAllAnswers} = this.state;
       if (!categoryDetailItem) {
         return (<Text>Chưa khởi tạo dữ liệu</Text>)
       }
@@ -104,11 +210,26 @@ export default class QuestionScreen extends React.Component {
             numColumns={parseInt(deviceWidth / 30)}
             extraData={currentPage}
             renderItem={({item, index}) => {
+              let backgroundColor = typeof answeredQuestions[index] !== 'undefined' 
+                                      && answeredQuestions[index] !== null ? "#1976d2" : "#a4a4a4";
+              
+              if (showAllAnswers) {
+                if (item.answer === answeredQuestions[index]) {
+                  backgroundColor = '#43a047';
+                } else {
+                  backgroundColor = '#f44336';
+                }
+              }
+
+              if (index === currentPage) {
+                backgroundColor = "#f48fb1";
+              }
+              
               return (
                 <View 
                   key={`bookmark-item-${index}`}
                   style={{
-                      backgroundColor: index === currentPage ? "#f48fb1" : "#a4a4a4",
+                      backgroundColor: backgroundColor,
                       width: 25,
                       height: 25,
                       margin: 2,
@@ -156,12 +277,12 @@ export default class QuestionScreen extends React.Component {
           <View style={{flex: 4}}>
             <Ripple 
               onPress={() => {
-                this.handleEndQuestion()
+                this.showAlertEndQuestionConfirm()
               }}
             >
               <View style={{flexDirection: 'row',justifyContent: 'center', alignItems: 'center'}}>
                 <MaterialCommunityIcons name="calendar-account" color="#fff" size={30} style={{textAlign: 'center'}} />
-                <Text style={{color: '#fff', fontSize: 18}}>Nộp bài</Text>
+                <Text style={{color: '#fff', fontSize: 18}}>Chấm điểm</Text>
               </View>
             </Ripple>
           </View>
@@ -184,7 +305,7 @@ export default class QuestionScreen extends React.Component {
     }
 
     renderViewPage() {
-      const {categoryDetailItem, currentPage} = this.state;
+      const {categoryDetailItem, currentPage, answeredQuestions} = this.state;
       if (!categoryDetailItem) {
         return (<Text>Chưa khởi tạo dữ liệu</Text>)
       }
@@ -203,30 +324,20 @@ export default class QuestionScreen extends React.Component {
               this.setState({currentPage: index});
             }}
           >
-            {questions.map((item, questionIndex) => {
-              return (
-                <Layout key={`viewpage-item-${questionIndex}`}  style={{flex: 1,  backgroundColor: '#fafafa', margin: 4}}>
-                  <ScrollView style={{flex: 1}}>
-                    <HTML
-                      baseFontStyle={{fontSize: 20}}
-                      html={item.ask}
-                      imagesMaxWidth={Dimensions.get("window").width}
-                    />
-                    {item.choices.map((choice, choiceIndex) => {
-                      return (
-                        <View key={`question-choice-${item.id}-${choiceIndex}`}>
-                          <HTML
-                            baseFontStyle={{fontSize: 19}}
-                            html={choice}
-                            imagesMaxWidth={Dimensions.get("window").width}
-                          />
-                        </View>
-                      )
-                    })}
-                  </ScrollView>
-                </Layout>
-              )
-            })}
+            {
+              questions.map((questionItem, questionIndex) => {
+                return (
+                  <QuestionItemComponent 
+                    key={`QuestionItemComponent-${questionIndex}`}
+                    questionItem={questionItem}
+                    questionIndex={questionIndex}
+                    answered={answeredQuestions[questionIndex]}
+                    showQuestionAnswer={this.state.showAllAnswers}
+                    onAnswerSelected={this.handleQuestionAnswerSelected.bind(this)}
+                  />
+                )
+              })
+            }
           </ViewPager>
         </View>  
       )

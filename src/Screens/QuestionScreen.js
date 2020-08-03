@@ -49,6 +49,8 @@ export default class QuestionScreen extends React.Component {
               vertical: -1,
             },
         });
+
+        this._myViewPagerComponent = null;
     }
 
     componentDidMount() {
@@ -98,23 +100,23 @@ export default class QuestionScreen extends React.Component {
     getNextNotAnsweredQuestion() {
       const {answeredQuestions, categoryDetailItem, currentPage} = this.state;
 
-      let nextPage = -1;
+      let nextIndex = -1;
       for(let i=currentPage + 1; i < categoryDetailItem.questions.length; i++) {
         if (typeof answeredQuestions[i] === 'undefined') {
-          nextPage = i;
+          nextIndex = i;
           break;
         }
       }
       
-      if (nextPage === -1) {
+      if (nextIndex === -1) {
         for(let i=0; i < currentPage; i++) {
           if (typeof answeredQuestions[i] === 'undefined') {
-            nextPage = i;
+            nextIndex = i;
             break;
           }
         }        
       }
-      return nextPage;
+      return nextIndex;
     }
 
     handleQuestionAnswerSelected(questionItem, questionIndex, selectedAnswerIndex) {
@@ -305,14 +307,16 @@ export default class QuestionScreen extends React.Component {
     }
 
     renderViewPage() {
-      const {categoryDetailItem, currentPage, answeredQuestions} = this.state;
+      const {categoryDetailItem, currentPage, answeredQuestions, showAllAnswers} = this.state;
       if (!categoryDetailItem) {
         return (<Text>Chưa khởi tạo dữ liệu</Text>)
       }
+      
       const questions = categoryDetailItem.questions;  
       return (
         <View style={{padding: 4, flex: 1,  backgroundColor: '#fafafa'}}>
           <MyViewPagerComponent 
+            ref={(ref) => this._myViewPagerComponent = ref}
             style={{flex: 1}} 
             selectedIndex={currentPage}
             shouldLoadComponent={(index) => {
@@ -330,7 +334,7 @@ export default class QuestionScreen extends React.Component {
                     questionItem={questionItem}
                     questionIndex={questionIndex}
                     answered={answeredQuestions[questionIndex]}
-                    showQuestionAnswer={this.state.showAllAnswers}
+                    showQuestionAnswer={showAllAnswers}
                     onAnswerSelected={this.handleQuestionAnswerSelected.bind(this)}
                   />
                 )

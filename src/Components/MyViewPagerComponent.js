@@ -8,7 +8,7 @@ class MyViewPagerComponent extends ViewPager {
         
         // override this param to set animation time
         this.createOffsetAnimation = (params) => {
-            const animationDuration = params.animated ? 110 : 0;
+            const animationDuration = params.animated ? 90 : 0;
             return react_native_1.Animated.timing(this.contentOffset, {
                 toValue: devsupport_1.RTLService.select(-params.offset, params.offset),
                 easing: react_native_1.Easing.linear,

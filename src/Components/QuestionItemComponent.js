@@ -12,12 +12,12 @@ export default class QuestionItemComponent extends React.Component {
             questionIndex: props.questionIndex,
             answered: props.answered,
             onAnswerSelected: props.onAnswerSelected,
-            showQuestionAnswer: props.showQuestionAnswer,
         }
     }
 
     render() {
-        const {questionItem, questionIndex, showQuestionAnswer} = this.state;
+        const {questionItem, questionIndex} = this.state;
+        const {showQuestionAnswer} = this.props;
         if(!questionItem) {
             return <Text>questionItem and questionIndex are required</Text>
         }

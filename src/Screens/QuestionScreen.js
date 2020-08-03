@@ -7,6 +7,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {AppContext} from '../Contexts/AppContext';
 import firebase from '../DataStorages/FirebaseApp';
 import QuestionItemComponent from '../Components/QuestionItemComponent';
+import {MyViewPagerComponent} from '../Components/MyViewPagerComponent';
+
 
 export default class QuestionScreen extends React.Component {
     constructor(props) {
@@ -23,8 +25,6 @@ export default class QuestionScreen extends React.Component {
           "biological": "Sinh",
           "civic-education": "GDCD"
         };
-
-        this._viewPage = null;
 
         const params = this.props.route.params;
         const categoryItem = params.item;
@@ -189,7 +189,7 @@ export default class QuestionScreen extends React.Component {
 
     gotoPage(page) {
       const currentTime = new Date().getTime();
-      if(currentTime - this.state.lastGotoPageTime > 700) {
+      if(currentTime - this.state.lastGotoPageTime > 100) {
         this.setState({currentPage: page, lastGotoPageTime: currentTime})
       } else {
         Alert.alert('Thông báo', 'Bạn thực hiện thao tác quá nhanh , Vui lòng thực hiện chậm lại');
@@ -312,8 +312,7 @@ export default class QuestionScreen extends React.Component {
       const questions = categoryDetailItem.questions;  
       return (
         <View style={{padding: 4, flex: 1,  backgroundColor: '#fafafa'}}>
-          <ViewPager 
-            ref={(ref) => this._viewPage = ref}
+          <MyViewPagerComponent 
             style={{flex: 1}} 
             selectedIndex={currentPage}
             shouldLoadComponent={(index) => {
@@ -323,8 +322,7 @@ export default class QuestionScreen extends React.Component {
             onSelect={index => {
               this.setState({currentPage: index});
             }}
-          >
-            {
+            children={
               questions.map((questionItem, questionIndex) => {
                 return (
                   <QuestionItemComponent 
@@ -338,7 +336,7 @@ export default class QuestionScreen extends React.Component {
                 )
               })
             }
-          </ViewPager>
+          />
         </View>  
       )
     }

@@ -42,7 +42,7 @@ export default class QuestionItemComponent extends React.Component {
                             if (this.state.onAnswerSelected) {
                                 this.state.onAnswerSelected(questionItem, questionIndex, selectedAnswerIndex);
                             }
-                        }, 120)
+                        }, 60)
                     })
                   }}
                 >

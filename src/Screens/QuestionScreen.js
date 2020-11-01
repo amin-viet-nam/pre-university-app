@@ -322,6 +322,11 @@ export default class QuestionScreen extends React.Component {
       if (!categoryDetailItem) {
         return (<Text>Chưa khởi tạo dữ liệu</Text>)
       }
+
+      let shouldUseKatex = false;
+      if (['math', 'physical', 'chemistry'].includes(categoryDetailItem.category)) {
+        shouldUseKatex = true;
+      }
       
       const questions = categoryDetailItem.questions;  
       return (
@@ -342,6 +347,7 @@ export default class QuestionScreen extends React.Component {
                 return (
                   <QuestionItemComponent 
                     key={`QuestionItemComponent-${questionIndex}`}
+                    useKatexHtmlInject={shouldUseKatex}
                     questionItem={questionItem}
                     questionIndex={questionIndex}
                     answered={answeredQuestions[questionIndex]}

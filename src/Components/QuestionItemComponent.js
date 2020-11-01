@@ -3,11 +3,13 @@ import { Text, View, Dimensions } from 'react-native';
 import HTML from "react-native-render-html";
 import { ScrollView } from 'react-native-gesture-handler';
 import { Layout, Radio, RadioGroup } from '@ui-kitten/components';
+import katex from 'katex';
 
 export default class QuestionItemComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            useKatexHtmlInject: props.useKatexHtmlInject,
             questionItem: props.questionItem,
             questionIndex: props.questionIndex,
             answered: props.answered,
@@ -15,22 +17,52 @@ export default class QuestionItemComponent extends React.Component {
         }
     }
 
+    katexStringReplace(str) {
+      const katexRegex = /\\\((.*?)\\\)/g;
+      const katexMatch = katexRegex.exec(str);
+      if (katexMatch) {
+        for (var i = 1; i < katexMatch.length; i++) {
+          const katexHtml = katex.renderToString(katexMatch[i], {
+              throwOnError: false,
+              strict: 'ignore'
+          });
+          str = str.replace('\\(' + katexMatch[i] + '\\)', katexHtml);
+        }
+      }
+      return str;    
+    }
+
     render() {
         const {questionItem, questionIndex} = this.state;
-        const {showQuestionAnswer} = this.props;
+        const {showQuestionAnswer, useKatexHtmlInject} = this.props;
         if(!questionItem) {
             return <Text>questionItem and questionIndex are required</Text>
         }
+
         const answered = this.state.answered;
+
+        let ask = questionItem.ask;
+        if (useKatexHtmlInject) {
+          ask = this.katexStringReplace(questionItem.ask);
+        }
 
         return (
           <Layout key={`viewpage-item-${questionIndex}`}  style={{flex: 1,  backgroundColor: '#fafafa', margin: 4}}>
             <ScrollView style={{flex: 1}}>
-              <HTML
-                baseFontStyle={{fontSize: 20}}
-                html={questionItem.ask}
-                imagesMaxWidth={Dimensions.get("window").width}
-              />
+
+              {useKatexHtmlInject ? 
+                <HTML
+                  baseFontStyle={{fontSize: 20}}
+                  html={ask}
+                  imagesMaxWidth={Dimensions.get("window").width}
+                />
+                : 
+                <HTML
+                  baseFontStyle={{fontSize: 20}}
+                  html={ask}
+                  imagesMaxWidth={Dimensions.get("window").width}
+                />
+              }
               <View>
                 <RadioGroup 
                   selectedIndex={showQuestionAnswer ? questionItem.answer : answered}
@@ -46,7 +78,13 @@ export default class QuestionItemComponent extends React.Component {
                     })
                   }}
                 >
-                  {questionItem.choices.map((choice, choiceIndex) => {
+                  {questionItem.choices && questionItem.choices.map((choice, choiceIndex) => {
+
+                    let htmlChoice = choice;
+                    if (useKatexHtmlInject) {
+                      htmlChoice = this.katexStringReplace(choice);
+                    }
+
                     let backgroundColor = '';
                     if (showQuestionAnswer) {
                         if (questionItem.answer === choiceIndex) {
@@ -55,6 +93,7 @@ export default class QuestionItemComponent extends React.Component {
                             backgroundColor = '#f44336';
                         }
                     }
+
                     return (
                       <Radio key={`question-choice-${questionItem.id}-${choiceIndex}`} disabled={showQuestionAnswer} style={{backgroundColor: backgroundColor, padding: 2}}>
                         {evaProps => {
@@ -77,11 +116,19 @@ export default class QuestionItemComponent extends React.Component {
                                 })()}
                               </Text>
                               <View style={{marginLeft: 2}}>
+                                {useKatexHtmlInject ? 
                                 <HTML
                                   baseFontStyle={{fontSize: 19}}
-                                  html={choice}
+                                  html={htmlChoice}
                                   imagesMaxWidth={Dimensions.get("window").width}
                                 />
+                                :
+                                <HTML
+                                  baseFontStyle={{fontSize: 19}}
+                                  html={htmlChoice}
+                                  imagesMaxWidth={Dimensions.get("window").width}
+                                />
+                                }
                               </View>
                             </View>
                           )

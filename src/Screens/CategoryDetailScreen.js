@@ -84,6 +84,7 @@ export default class CategoryDetailScreen extends React.Component {
                                 name: m.name,
                                 hide: m.hide === true,
                             }))
+                            .sort((a, b) => -(a.name - b.name))
                     }); 
                 } else {
                     this.setState({

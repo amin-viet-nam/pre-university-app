@@ -4,11 +4,15 @@ import { Text, FlatList, View, Alert, Dimensions } from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import { ViewPager } from '@ui-kitten/components';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import base64 from 'react-native-base64'
 import {AppContext} from '../Contexts/AppContext';
 import firebase from '../DataStorages/FirebaseApp';
 import QuestionItemComponent from '../Components/QuestionItemComponent';
 import {MyViewPagerComponent} from '../Components/MyViewPagerComponent';
+import CryptoJS from 'crypto-js';
 
+const dz = CryptoJS.Rabbit.decrypt;
+const ecutf8 = CryptoJS.enc.Utf8;
 
 export default class QuestionScreen extends React.Component {
     constructor(props) {
@@ -62,8 +66,15 @@ export default class QuestionScreen extends React.Component {
                 this.context.setLoading(false);
                 if (snapshot.val()) {
                     const categoryDetailObj = snapshot.val();
+                    categoryDetailObj.questions = categoryDetailObj.questions
+                                                    .map(m => {
+                                                      m.ask = dz(m.ask, base64.decode('cndQeDNwNCRZN2EkNDY2Qz93cSUkNHZOTSMtWU44d3k=') + m.id)
+                                                                   .toString(ecutf8); 
+                                                      return m;
+                                                    });
+
                     this.setState({
-                        categoryDetailItem: snapshot.val()
+                        categoryDetailItem: categoryDetailObj
                     }, () => {
                       this.props.navigation.setOptions({
                           title: `Giải Đề ${this.categoryShortTitleMap[categoryItem.category]} ${this.state.categoryDetailItem.name}`,

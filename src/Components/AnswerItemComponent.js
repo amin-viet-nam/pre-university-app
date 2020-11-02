@@ -20,7 +20,7 @@ export default class AnswerItemComponent extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return JSON.stringify(nextProps) !== JSON.stringify(this.props)
+        return JSON.stringify(this.props) !== JSON.stringify(nextProps)
             || JSON.stringify(this.state) !== JSON.stringify(nextState);
     }
 

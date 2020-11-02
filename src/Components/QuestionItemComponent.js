@@ -26,7 +26,7 @@ export default class QuestionItemComponent extends React.Component {
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return JSON.stringify(nextProps) !== JSON.stringify(this.props)
+        return JSON.stringify(this.props) !== JSON.stringify(nextProps)
             || JSON.stringify(this.state) !== JSON.stringify(nextState);
     }
 
@@ -114,13 +114,11 @@ export default class QuestionItemComponent extends React.Component {
                             onChange={selectedAnswerIndex => {
                                 this.setState({
                                     answered: selectedAnswerIndex
-                                }, () => {
-                                    setTimeout(() => {
-                                        if (this.state.onAnswerSelected) {
-                                            this.state.onAnswerSelected(questionItem, questionIndex, selectedAnswerIndex);
-                                        }
-                                    }, 100)
-                                })
+                                });
+
+                                if (this.state.onAnswerSelected) {
+                                    this.state.onAnswerSelected(questionItem, questionIndex, selectedAnswerIndex);
+                                }
                             }}
                             style={{opacity: !useKatexHtmlInject || this.state.isAllKatexComponentLoaded ? 1 : 0}}
                         >

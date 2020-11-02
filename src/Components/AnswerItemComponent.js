@@ -19,6 +19,11 @@ export default class AnswerItemComponent extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return JSON.stringify(nextProps) !== JSON.stringify(this.props)
+            || JSON.stringify(this.state) !== JSON.stringify(nextState);
+    }
+
     render() {
         const {evaProps, choiceIndex, choice, useKatexHtmlInject, choiceWebviewStyles} = this.state;
 
@@ -45,7 +50,7 @@ export default class AnswerItemComponent extends React.Component {
                         }
                     })()}
                 </Text>
-                <View style={{marginLeft: 2}}>
+                <View style={{marginLeft: 2, flex: 1}}>
                     {useKatexHtmlInject ?
                         <WebView
                             source={{html: choice}}
@@ -60,15 +65,11 @@ export default class AnswerItemComponent extends React.Component {
                                             ...this.state.choiceWebviewStyles,
                                             height: webviewHeight
                                         }
-                                    }, () => {
-                                        if (typeof this.props.onDomElementRenderCompleted === 'function') {
-                                            this.props.onDomElementRenderCompleted(webviewHeight);
-                                        }
                                     })
                                 }
                             }}
                             javaScriptEnabled={true}
-                            style={{...choiceWebviewStyles, width: 500}}
+                            style={{...choiceWebviewStyles, opacity: choiceWebviewStyles.height !== 0 ? 1: 0}}
                         />
                         :
                         <HTML

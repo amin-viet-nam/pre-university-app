@@ -342,9 +342,8 @@ export default class QuestionScreen extends React.Component {
                     style={{flex: 1}}
                     selectedIndex={currentPage}
                     shouldLoadComponent={(index) => {
-                        // const diff = index - currentPage;
-                        // return diff >= -1 && diff <= 1
-                        return index === currentPage;
+                        const diff = index - currentPage;
+                        return diff >= 0 && diff <= 1
                     }}
                     onSelect={index => {
                         this.setState({currentPage: index});
@@ -357,6 +356,7 @@ export default class QuestionScreen extends React.Component {
                                     useKatexHtmlInject={shouldUseKatex}
                                     questionItem={questionItem}
                                     questionIndex={questionIndex}
+
                                     answered={answeredQuestions[questionIndex]}
                                     showQuestionAnswer={showAllAnswers}
                                     onAnswerSelected={this.handleQuestionAnswerSelected.bind(this)}

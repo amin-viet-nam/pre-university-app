@@ -11,10 +11,6 @@ import katexStyle from '../../library/katex/katex-style';
 export default class QuestionItemComponent extends React.Component {
     constructor(props) {
         super(props);
-        this.katexLoadedAutoHeight = {
-            question: 0,
-            choices: {}
-        }
         this.state = {
             useKatexHtmlInject: props.useKatexHtmlInject,
             questionItem: props.questionItem,
@@ -22,11 +18,16 @@ export default class QuestionItemComponent extends React.Component {
             answered: props.answered,
             onAnswerSelected: props.onAnswerSelected,
             askWebviewStyles: {
-                height: 0,
+                height: 50,
                 backgroundColor: 'rgba(255,255,255,0)'
             },
-            isAllKatexComponentLoaded: false
+            isAllKatexComponentLoaded: true
         }
+    }
+
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return JSON.stringify(nextProps) !== JSON.stringify(this.props)
+            || JSON.stringify(this.state) !== JSON.stringify(nextState);
     }
 
     katexStringReplace(str) {
@@ -59,26 +60,10 @@ export default class QuestionItemComponent extends React.Component {
                       var tid = setInterval( function () {
                              if ( document.readyState !== 'complete' ) return;
                              clearInterval( tid );       
-                             setTimeout(post, 10);
-                      }, 100 );
+                             setTimeout(post, 1);
+                      }, 50 );
                     </script>
                     </html>`;
-    }
-
-    checkAndHandleAllKatexComponentLoaded() {
-        let flag = 1;
-        const choices = this.state.questionItem.choices;
-        for (let i = 0; i < choices.length; i++) {
-            flag = flag && this.katexLoadedAutoHeight.choices[i];
-        }
-
-        if (this.katexLoadedAutoHeight.question && flag) {
-            if (!this.state.isAllKatexComponentLoaded) {
-                this.setState({
-                    isAllKatexComponentLoaded: true
-                })
-            }
-        }
     }
 
     render() {
@@ -112,9 +97,6 @@ export default class QuestionItemComponent extends React.Component {
                                         ...this.state.askWebviewStyles,
                                         height: webviewHeight
                                     }
-                                }, () => {
-                                    this.katexLoadedAutoHeight.question = webviewHeight;
-                                    this.checkAndHandleAllKatexComponentLoaded();
                                 })
                             }}
                             javaScriptEnabled={true}
@@ -140,6 +122,7 @@ export default class QuestionItemComponent extends React.Component {
                                     }, 100)
                                 })
                             }}
+                            style={{opacity: !useKatexHtmlInject || this.state.isAllKatexComponentLoaded ? 1 : 0}}
                         >
                             {questionItem.choices && questionItem.choices.map((originChoice, choiceIndex) => {
                                 let choice = originChoice.replace('\\n', '<br>');
@@ -167,11 +150,6 @@ export default class QuestionItemComponent extends React.Component {
                                                     choiceIndex={choiceIndex}
                                                     choice={choice}
                                                     useKatexHtmlInject={useKatexHtmlInject}
-                                                    defaultHeight={this.katexLoadedAutoHeight.choices[choiceIndex]}
-                                                    onDomElementRenderCompleted={(webviewHeight) => {
-                                                        this.katexLoadedAutoHeight.choices[choiceIndex] = webviewHeight;
-                                                        this.checkAndHandleAllKatexComponentLoaded();
-                                                    }}
                                                 />
                                             )
                                         }}

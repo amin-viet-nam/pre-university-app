@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import React from 'react';
+import {Text, View} from 'react-native';
 
 
 export default class ProfileScreen extends React.Component {
@@ -7,11 +7,11 @@ export default class ProfileScreen extends React.Component {
         super(props);
     }
 
-    render(){
+    render() {
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text>Profile!</Text>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text>Profile!</Text>
             </View>
-          );
-    }    
+        );
+    }
 }

@@ -1,11 +1,12 @@
 import {ViewPager} from '../../node_modules/@ui-kitten/components/ui/viewPager/viewPager.component.js';
+
 const react_native_1 = require("react-native");
 const devsupport_1 = require("../../node_modules/@ui-kitten/components/devsupport");
 
 class MyViewPagerComponent extends ViewPager {
     constructor() {
         super(...arguments);
-        
+
         // override this param to set animation time
         this.createOffsetAnimation = (params) => {
             const animationDuration = params.animated ? 90 : 0;

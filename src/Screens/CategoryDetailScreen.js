@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, FlatList, View, Alert } from 'react-native';
-import { Card } from '@ui-kitten/components';
+import React from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {Alert, FlatList, Text, View} from 'react-native';
+import {Card} from '@ui-kitten/components';
 import Ripple from 'react-native-material-ripple';
 import NavigatorService from '../../src/Services/NavigatorService';
 import {AppContext} from '../Contexts/AppContext';
@@ -53,12 +53,12 @@ export default class CategoryDetailScreen extends React.Component {
             categoryDetail: params.item,
             categoryDetailList: [],
             layoutColor: colorMap[params.item.id] || {
-                    "primaryColor": "#c8e6c9",
-                    "secondaryColor": "#f1f8e9"
-                }
+                "primaryColor": "#c8e6c9",
+                "secondaryColor": "#f1f8e9"
+            }
         };
         this.props.navigation.setOptions({
-            title: "Giải Đề " + this.state.categoryDetail.text, 
+            title: "Giải Đề " + this.state.categoryDetail.text,
             headerTintColor: '#212121',
             headerStyle: {
                 backgroundColor: this.state.layoutColor.primaryColor
@@ -85,7 +85,7 @@ export default class CategoryDetailScreen extends React.Component {
                                 hide: m.hide === true,
                             }))
                             .sort((a, b) => -(a.name - b.name))
-                    }); 
+                    });
                 } else {
                     this.setState({
                         categoryDetailList: []
@@ -93,7 +93,7 @@ export default class CategoryDetailScreen extends React.Component {
                         setTimeout(() => {
                             Alert.alert('Thông báo', 'Chưa có đề thi phù hợp với truy vấn, Vui lòng quay lại sau')
                         }, 100);
-                    });      
+                    });
                 }
             });
     }
@@ -101,33 +101,42 @@ export default class CategoryDetailScreen extends React.Component {
     categoryDetailItemClick(item) {
         console.log('categoryDetailItemClick', item);
         NavigatorService.navigate('QuestionScreen', {item});
-      }
+    }
 
     render() {
         const {categoryDetailList, layoutColor} = this.state;
         return (
-        <SafeAreaView style={{ justifyContent: 'center', flex: 1, padding: 4, backgroundColor: layoutColor.secondaryColor }}>
-            <FlatList
-            data={categoryDetailList}
-            numColumns={3}
-            keyExtractor={(item, index) => index}
-            renderItem={({ item }) => (
-                <View style={{ flex: 1, flexDirection: 'column', margin: 4}}>
-                    <Card
-                    style={{margin: 4, backgroundColor: layoutColor.primaryColor, borderRadius: 4, 
-                    shadowColor: "#000", shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.25, shadowRadius: 3.84, elevation: 5,}}
-                    >
-                    <Ripple style={{padding: 16}} onPress={ () => this.categoryDetailItemClick(item)}>
-                        <Text style={{fontSize: 20, textAlign: 'center', color: '#212121'}}>
-                            Đề thi {item.name}
-                        </Text>
-                    </Ripple>
-                    </Card>
-                </View>
-            )}
-            />
-        </SafeAreaView>
+            <SafeAreaView
+                style={{justifyContent: 'center', flex: 1, padding: 4, backgroundColor: layoutColor.secondaryColor}}>
+                <FlatList
+                    data={categoryDetailList}
+                    numColumns={3}
+                    keyExtractor={(item, index) => index}
+                    renderItem={({item}) => (
+                        <View style={{flex: 1, flexDirection: 'column', margin: 4}}>
+                            <Card
+                                style={{
+                                    margin: 4,
+                                    backgroundColor: layoutColor.primaryColor,
+                                    borderRadius: 4,
+                                    shadowColor: "#000",
+                                    shadowOffset: {width: 0, height: 2,},
+                                    shadowOpacity: 0.25,
+                                    shadowRadius: 3.84,
+                                    elevation: 5,
+                                }}
+                            >
+                                <Ripple style={{padding: 16}} onPress={() => this.categoryDetailItemClick(item)}>
+                                    <Text style={{fontSize: 20, textAlign: 'center', color: '#212121'}}>
+                                        Đề thi {item.name}
+                                    </Text>
+                                </Ripple>
+                            </Card>
+                        </View>
+                    )}
+                />
+            </SafeAreaView>
         );
-    }   
+    }
 }
 CategoryDetailScreen.contextType = AppContext;

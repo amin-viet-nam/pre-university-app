@@ -25,10 +25,7 @@ export default class QuestionItemComponent extends React.Component {
                 height: 0,
                 backgroundColor: 'rgba(255,255,255,0)'
             },
-            isAllKatexComponentLoaded: false,
-            questionChoiceKatexRenderingStyle: {
-                opacity: 0
-            },
+            isAllKatexComponentLoaded: false
         }
     }
 
@@ -78,11 +75,7 @@ export default class QuestionItemComponent extends React.Component {
         if (this.katexLoadedAutoHeight.question && flag) {
             if (!this.state.isAllKatexComponentLoaded) {
                 this.setState({
-                    isAllKatexComponentLoaded: true,
-                    questionChoiceKatexRenderingStyle: {
-                        ...this.state.questionChoiceKatexRenderingStyle,
-                        opacity: 1
-                    }
+                    isAllKatexComponentLoaded: true
                 })
             }
         }
@@ -111,7 +104,7 @@ export default class QuestionItemComponent extends React.Component {
                             automaticallyAdjustContentInsets={false}
                             scalesPageToFit={false}
                             scrollEnabled={false}
-                            style={{...this.state.askWebviewStyles, ...this.state.questionChoiceKatexRenderingStyle}}
+                            style={{...this.state.askWebviewStyles}}
                             onMessage={(event) => {
                                 const webviewHeight = Number(event.nativeEvent.data);
                                 this.setState({
@@ -144,10 +137,9 @@ export default class QuestionItemComponent extends React.Component {
                                         if (this.state.onAnswerSelected) {
                                             this.state.onAnswerSelected(questionItem, questionIndex, selectedAnswerIndex);
                                         }
-                                    }, 60)
+                                    }, 100)
                                 })
                             }}
-                            style={{...this.state.questionChoiceKatexRenderingStyle}}
                         >
                             {questionItem.choices && questionItem.choices.map((originChoice, choiceIndex) => {
                                 let choice = originChoice.replace('\\n', '<br>');

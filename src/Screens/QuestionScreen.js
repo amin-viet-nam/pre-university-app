@@ -205,7 +205,7 @@ export default class QuestionScreen extends React.Component {
 
     gotoPage(page) {
         const currentTime = new Date().getTime();
-        if (currentTime - this.state.lastGotoPageTime > 100) {
+        if (currentTime - this.state.lastGotoPageTime > 500) {
             this.setState({currentPage: page, lastGotoPageTime: currentTime})
         } else {
             Alert.alert('Thông báo', 'Bạn thực hiện thao tác quá nhanh , Vui lòng thực hiện chậm lại');
@@ -346,7 +346,7 @@ export default class QuestionScreen extends React.Component {
                         return diff >= -1 && diff <= 1
                     }}
                     onSelect={index => {
-                        this.setState({currentPage: index});
+                        this.gotoPage(index)
                     }}
                     children={
                         questions.map((questionItem, questionIndex) => {

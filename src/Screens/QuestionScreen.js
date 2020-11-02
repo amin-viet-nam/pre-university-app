@@ -342,8 +342,9 @@ export default class QuestionScreen extends React.Component {
                     style={{flex: 1}}
                     selectedIndex={currentPage}
                     shouldLoadComponent={(index) => {
-                        const diff = index - currentPage;
-                        return diff >= -1 && diff <= 1
+                        // const diff = index - currentPage;
+                        // return diff >= -1 && diff <= 1
+                        return index === currentPage;
                     }}
                     onSelect={index => {
                         this.setState({currentPage: index});

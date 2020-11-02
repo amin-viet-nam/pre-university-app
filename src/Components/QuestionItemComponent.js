@@ -4,16 +4,31 @@ import HTML from "react-native-render-html";
 import {ScrollView} from 'react-native-gesture-handler';
 import {Layout, Radio, RadioGroup} from '@ui-kitten/components';
 import katex from 'katex';
+import {WebView} from 'react-native-webview';
+import AnswerItemComponent from './AnswerItemComponent';
+import katexStyle from '../../library/katex/katex-style';
 
 export default class QuestionItemComponent extends React.Component {
     constructor(props) {
         super(props);
+        this.katexLoadedAutoHeight = {
+            question: 0,
+            choices: {}
+        }
         this.state = {
             useKatexHtmlInject: props.useKatexHtmlInject,
             questionItem: props.questionItem,
             questionIndex: props.questionIndex,
             answered: props.answered,
             onAnswerSelected: props.onAnswerSelected,
+            askWebviewStyles: {
+                height: 0,
+                backgroundColor: 'rgba(255,255,255,0)'
+            },
+            isAllKatexComponentLoaded: false,
+            questionChoiceKatexRenderingStyle: {
+                opacity: 0
+            },
         }
     }
 
@@ -29,7 +44,48 @@ export default class QuestionItemComponent extends React.Component {
                 str = str.replace('\\(' + katexMatch[i] + '\\)', katexHtml);
             }
         }
-        return str;
+        return `<!DOCTYPE html> 
+                    <html> 
+                    <head> 
+                        <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
+                        <style> ${katexStyle.default} </style> 
+                        <style>
+                        </style>
+                    </head> 
+                    <body> ${str} </body> 
+                    <script>
+                      function post () {
+                        window.ReactNativeWebView.postMessage(
+                          Math.max(document.documentElement.clientHeight, document.documentElement.scrollHeight, document.body.clientHeight, document.body.scrollHeight)
+                        );
+                      }
+                      var tid = setInterval( function () {
+                             if ( document.readyState !== 'complete' ) return;
+                             clearInterval( tid );       
+                             setTimeout(post, 10);
+                      }, 100 );
+                    </script>
+                    </html>`;
+    }
+
+    checkAndHandleAllKatexComponentLoaded() {
+        let flag = 1;
+        const choices = this.state.questionItem.choices;
+        for (let i = 0; i < choices.length; i++) {
+            flag = flag && this.katexLoadedAutoHeight.choices[i];
+        }
+
+        if (this.katexLoadedAutoHeight.question && flag) {
+            if (!this.state.isAllKatexComponentLoaded) {
+                this.setState({
+                    isAllKatexComponentLoaded: true,
+                    questionChoiceKatexRenderingStyle: {
+                        ...this.state.questionChoiceKatexRenderingStyle,
+                        opacity: 1
+                    }
+                })
+            }
+        }
     }
 
     render() {
@@ -41,7 +97,7 @@ export default class QuestionItemComponent extends React.Component {
 
         const answered = this.state.answered;
 
-        let ask = questionItem.ask;
+        let ask = questionItem.ask.replaceAll('\\n', '<br>');
         if (useKatexHtmlInject) {
             ask = this.katexStringReplace(questionItem.ask);
         }
@@ -49,12 +105,26 @@ export default class QuestionItemComponent extends React.Component {
         return (
             <Layout key={`viewpage-item-${questionIndex}`} style={{flex: 1, backgroundColor: '#fafafa', margin: 4}}>
                 <ScrollView style={{flex: 1}}>
-
                     {useKatexHtmlInject ?
-                        <HTML
-                            baseFontStyle={{fontSize: 20}}
-                            html={ask}
-                            imagesMaxWidth={Dimensions.get("window").width}
+                        <WebView
+                            source={{html: ask}}
+                            automaticallyAdjustContentInsets={false}
+                            scalesPageToFit={false}
+                            scrollEnabled={false}
+                            style={{...this.state.askWebviewStyles, ...this.state.questionChoiceKatexRenderingStyle}}
+                            onMessage={(event) => {
+                                const webviewHeight = Number(event.nativeEvent.data);
+                                this.setState({
+                                    askWebviewStyles: {
+                                        ...this.state.askWebviewStyles,
+                                        height: webviewHeight
+                                    }
+                                }, () => {
+                                    this.katexLoadedAutoHeight.question = webviewHeight;
+                                    this.checkAndHandleAllKatexComponentLoaded();
+                                })
+                            }}
+                            javaScriptEnabled={true}
                         />
                         :
                         <HTML
@@ -77,12 +147,12 @@ export default class QuestionItemComponent extends React.Component {
                                     }, 60)
                                 })
                             }}
+                            style={{...this.state.questionChoiceKatexRenderingStyle}}
                         >
-                            {questionItem.choices && questionItem.choices.map((choice, choiceIndex) => {
-
-                                let htmlChoice = choice;
+                            {questionItem.choices && questionItem.choices.map((originChoice, choiceIndex) => {
+                                let choice = originChoice.replace('\\n', '<br>');
                                 if (useKatexHtmlInject) {
-                                    htmlChoice = this.katexStringReplace(choice);
+                                    choice = this.katexStringReplace(originChoice);
                                 }
 
                                 let backgroundColor = '';
@@ -100,44 +170,17 @@ export default class QuestionItemComponent extends React.Component {
                                            style={{backgroundColor: backgroundColor, padding: 2}}>
                                         {evaProps => {
                                             return (
-                                                <View {...evaProps} style={{
-                                                    ...evaProps.style,
-                                                    flex: 1,
-                                                    flexDirection: 'row',
-                                                    alignItems: 'center'
-                                                }}>
-                                                    <Text style={{fontSize: 19}}>
-                                                        {(() => {
-                                                            switch (choiceIndex) {
-                                                                case 0:
-                                                                    return <Text>A. </Text>
-                                                                case 1:
-                                                                    return <Text>B. </Text>
-                                                                case 2:
-                                                                    return <Text>C. </Text>
-                                                                case 3:
-                                                                    return <Text>D. </Text>
-                                                                default:
-                                                                    return <Text>{choiceIndex + 1} Đáp án khác . </Text>
-                                                            }
-                                                        })()}
-                                                    </Text>
-                                                    <View style={{marginLeft: 2}}>
-                                                        {useKatexHtmlInject ?
-                                                            <HTML
-                                                                baseFontStyle={{fontSize: 19}}
-                                                                html={htmlChoice}
-                                                                imagesMaxWidth={Dimensions.get("window").width}
-                                                            />
-                                                            :
-                                                            <HTML
-                                                                baseFontStyle={{fontSize: 19}}
-                                                                html={htmlChoice}
-                                                                imagesMaxWidth={Dimensions.get("window").width}
-                                                            />
-                                                        }
-                                                    </View>
-                                                </View>
+                                                <AnswerItemComponent
+                                                    evaProps={evaProps}
+                                                    choiceIndex={choiceIndex}
+                                                    choice={choice}
+                                                    useKatexHtmlInject={useKatexHtmlInject}
+                                                    defaultHeight={this.katexLoadedAutoHeight.choices[choiceIndex]}
+                                                    onDomElementRenderCompleted={(webviewHeight) => {
+                                                        this.katexLoadedAutoHeight.choices[choiceIndex] = webviewHeight;
+                                                        this.checkAndHandleAllKatexComponentLoaded();
+                                                    }}
+                                                />
                                             )
                                         }}
                                     </Radio>

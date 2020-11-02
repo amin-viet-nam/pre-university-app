@@ -1,12 +1,12 @@
 import React from 'react';
-import {Dimensions, Text, View} from 'react-native';
-import HTML from "react-native-render-html";
+import {Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Layout, Radio, RadioGroup} from '@ui-kitten/components';
 import katex from 'katex';
-import {WebView} from 'react-native-webview';
 import AnswerItemComponent from './AnswerItemComponent';
+import WebviewKatexComponent from './WebviewKatexComponent';
 import katexStyle from '../../library/katex/katex-style';
+import Image from "react-native-web/src/exports/Image";
 
 export default class QuestionItemComponent extends React.Component {
     constructor(props) {
@@ -31,6 +31,10 @@ export default class QuestionItemComponent extends React.Component {
     }
 
     katexStringReplace(str) {
+        if (str === null) {
+            return null;
+        }
+
         const katexRegex = /\\\((.*?)\\\)/g;
         const katexMatch = katexRegex.exec(str);
         if (katexMatch) {
@@ -67,47 +71,31 @@ export default class QuestionItemComponent extends React.Component {
     }
 
     render() {
-        const {questionItem, questionIndex} = this.state;
+        const {questionItem, questionIndex, answered} = this.state;
         const {showQuestionAnswer, useKatexHtmlInject} = this.props;
         if (!questionItem) {
             return <Text>questionItem and questionIndex are required</Text>
         }
 
-        const answered = this.state.answered;
-
         let ask = questionItem.ask.replaceAll('\\n', '<br>');
+        let solutionGuide = questionItem.solutionGuide;
+
+        let hasSolutionImage = questionItem.hasSolutionImage;
+        let hasQuestionImage = questionItem.hasQuestionImage;
+
         if (useKatexHtmlInject) {
             ask = this.katexStringReplace(questionItem.ask);
+            solutionGuide = this.katexStringReplace(questionItem.solutionGuide);
         }
 
         return (
             <Layout key={`viewpage-item-${questionIndex}`} style={{flex: 1, backgroundColor: '#fafafa', margin: 4}}>
                 <ScrollView style={{flex: 1}}>
-                    {useKatexHtmlInject ?
-                        <WebView
-                            source={{html: ask}}
-                            automaticallyAdjustContentInsets={false}
-                            scalesPageToFit={false}
-                            scrollEnabled={false}
-                            style={{...this.state.askWebviewStyles}}
-                            onMessage={(event) => {
-                                const webviewHeight = Number(event.nativeEvent.data);
-                                this.setState({
-                                    askWebviewStyles: {
-                                        ...this.state.askWebviewStyles,
-                                        height: webviewHeight
-                                    }
-                                })
-                            }}
-                            javaScriptEnabled={true}
-                        />
-                        :
-                        <HTML
-                            baseFontStyle={{fontSize: 20}}
-                            html={ask}
-                            imagesMaxWidth={Dimensions.get("window").width}
-                        />
-                    }
+                    <WebviewKatexComponent
+                        html={ask}
+                        useKatexHtmlInject={useKatexHtmlInject}
+                        katexWebviewStyles={{height: 70}}
+                    />
                     <View>
                         <RadioGroup
                             selectedIndex={showQuestionAnswer ? questionItem.answer : answered}
@@ -156,6 +144,18 @@ export default class QuestionItemComponent extends React.Component {
                             })}
                         </RadioGroup>
                     </View>
+                    {
+                        showQuestionAnswer && solutionGuide &&
+                        <View>
+                            <Text style={{fontSize: 25}}>Hướng dẫn giải</Text>
+                            <WebviewKatexComponent
+                                html={solutionGuide}
+                                useKatexHtmlInject={useKatexHtmlInject}
+                                katexWebviewStyles={{height: 70}}
+                            />
+                        </View>
+                    }
+
                 </ScrollView>
             </Layout>
         )

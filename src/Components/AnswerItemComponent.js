@@ -1,7 +1,6 @@
-import {Dimensions, Text, View} from "react-native";
-import {WebView} from "react-native-webview";
-import HTML from "react-native-render-html";
+import {Text, View} from "react-native";
 import React from "react";
+import WebviewKatexComponent from "./WebviewKatexComponent";
 
 
 export default class AnswerItemComponent extends React.Component {
@@ -12,10 +11,6 @@ export default class AnswerItemComponent extends React.Component {
             choiceIndex: props.choiceIndex,
             choice: props.choice,
             useKatexHtmlInject: props.useKatexHtmlInject,
-            choiceWebviewStyles: {
-                height: props.defaultHeight || 0,
-                backgroundColor: 'rgba(255,255,255,0)'
-            }
         }
     }
 
@@ -25,7 +20,7 @@ export default class AnswerItemComponent extends React.Component {
     }
 
     render() {
-        const {evaProps, choiceIndex, choice, useKatexHtmlInject, choiceWebviewStyles} = this.state;
+        const {evaProps, choiceIndex, choice, useKatexHtmlInject} = this.state;
 
         return (
             <View {...evaProps} style={{
@@ -51,33 +46,11 @@ export default class AnswerItemComponent extends React.Component {
                     })()}
                 </Text>
                 <View style={{marginLeft: 2, flex: 1}}>
-                    {useKatexHtmlInject ?
-                        <WebView
-                            source={{html: choice}}
-                            automaticallyAdjustContentInsets={false}
-                            scrollEnabled={false}
-                            scalesPageToFit={false}
-                            onMessage={(event) => {
-                                const webviewHeight = Number(event.nativeEvent.data);
-                                if (choiceWebviewStyles.height !== webviewHeight) {
-                                    this.setState({
-                                        choiceWebviewStyles: {
-                                            ...this.state.choiceWebviewStyles,
-                                            height: webviewHeight
-                                        }
-                                    })
-                                }
-                            }}
-                            javaScriptEnabled={true}
-                            style={{...choiceWebviewStyles, opacity: choiceWebviewStyles.height !== 0 ? 1: 0}}
-                        />
-                        :
-                        <HTML
-                            baseFontStyle={{fontSize: 19}}
-                            html={choice}
-                            imagesMaxWidth={Dimensions.get("window").width}
-                        />
-                    }
+                    <WebviewKatexComponent
+                        html={choice}
+                        useKatexHtmlInject={useKatexHtmlInject}
+                        katexWebviewStyles={{height: 50}}
+                    />
                 </View>
             </View>
         )

@@ -77,7 +77,7 @@ export default class QuestionItemComponent extends React.Component {
             return <Text>questionItem and questionIndex are required</Text>
         }
 
-        let ask = questionItem.ask.replaceAll('\\n', '<br>');
+        let ask = questionItem.ask.replace(/\\n/g, '<br>');
         let solutionGuide = questionItem.solutionGuide;
 
         let hasSolutionImage = questionItem.hasSolutionImage;

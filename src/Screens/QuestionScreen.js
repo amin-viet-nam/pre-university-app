@@ -62,7 +62,6 @@ export default class QuestionScreen extends React.Component {
 
         firebase.database().ref(`categoryDetails/${categoryItem.id}`)
             .once('value', snapshot => {
-                this.context.setLoading(false);
                 if (snapshot.val()) {
                     const categoryDetailObj = snapshot.val();
                     categoryDetailObj.questions = categoryDetailObj.questions
@@ -75,6 +74,9 @@ export default class QuestionScreen extends React.Component {
                     this.setState({
                         categoryDetailItem: categoryDetailObj
                     }, () => {
+                        setTimeout(() => {
+                            this.context.setLoading(false);
+                        }, 500);
                         this.props.navigation.setOptions({
                             title: `Giải Đề ${this.categoryShortTitleMap[categoryItem.category]} ${this.state.categoryDetailItem.name}`,
                         });

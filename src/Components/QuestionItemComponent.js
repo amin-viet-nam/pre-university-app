@@ -6,7 +6,6 @@ import katex from 'katex';
 import AnswerItemComponent from './AnswerItemComponent';
 import WebviewKatexComponent from './WebviewKatexComponent';
 import katexStyle from '../../library/katex/katex-style';
-import Image from "react-native-web/src/exports/Image";
 
 export default class QuestionItemComponent extends React.Component {
     constructor(props) {
@@ -35,23 +34,22 @@ export default class QuestionItemComponent extends React.Component {
             return null;
         }
 
-        const katexRegex = /\\\((.*?)\\\)/g;
-        const katexMatch = katexRegex.exec(str);
-        if (katexMatch) {
-            for (var i = 1; i < katexMatch.length; i++) {
-                const katexHtml = katex.renderToString(katexMatch[i], {
+        str = str.replace(/(\\\([^]*?\\\))/g, function (m, bracket) {
+            if (bracket !== undefined) {
+                return katex.renderToString(m.replace(/\\\(|\$\$|\\\)/g, ""), {
                     throwOnError: false,
                     strict: 'ignore'
                 });
-                str = str.replace('\\(' + katexMatch[i] + '\\)', katexHtml);
             }
-        }
+            return m;
+        });
+
         return `<!DOCTYPE html> 
                     <html> 
                     <head> 
                         <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
-                        <style> ${katexStyle.default} </style> 
                         <style>
+                        ${katexStyle}
                         </style>
                     </head> 
                     <body> ${str} </body> 

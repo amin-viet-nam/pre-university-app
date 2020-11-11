@@ -59,6 +59,7 @@ export default class CategoryDetailScreen extends React.Component {
         };
         this.props.navigation.setOptions({
             title: "Giải Đề " + this.state.categoryDetail.text,
+            headerBackTitle: 'Trở về',
             headerTintColor: '#212121',
             headerStyle: {
                 backgroundColor: this.state.layoutColor.primaryColor

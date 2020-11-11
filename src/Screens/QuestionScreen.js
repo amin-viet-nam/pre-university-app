@@ -43,6 +43,7 @@ export default class QuestionScreen extends React.Component {
 
         this.props.navigation.setOptions({
             title: `Giải Đề ${this.categoryShortTitleMap[categoryItem.category]} ${categoryItem.name}`,
+            headerBackTitle: 'Trở về',
             headerTintColor: '#212121',
             headerStyle: {
                 backgroundColor: '#f8bbd0'
@@ -79,6 +80,7 @@ export default class QuestionScreen extends React.Component {
                         }, 500);
                         this.props.navigation.setOptions({
                             title: `Giải Đề ${this.categoryShortTitleMap[categoryItem.category]} ${this.state.categoryDetailItem.name}`,
+                            headerBackTitle: 'Trở về'
                         });
                     });
                 } else {

@@ -99,8 +99,14 @@ export default class QuestionItemComponent extends React.Component {
                     {
                         hasQuestionImage &&
                         <Image
+                            ref={(ref) => {
+                                this._questionImageRef = ref;
+                            }}
                             style={{width: deviceWidth, height: 200}}
                             resizeMode="contain"
+                            onError={e => {
+                                this._questionImageRef.setNativeProps({style: {display: 'none'}})
+                            }}
                             source={{uri: `${externalImagePath}/${questionItem.id}-question.png`}}/>
                     }
                     <View>
@@ -165,8 +171,14 @@ export default class QuestionItemComponent extends React.Component {
                     {
                         showQuestionAnswer && hasSolutionImage &&
                         <Image
+                            ref={(ref) => {
+                                this._answerImageRef = ref;
+                            }}
                             style={{width: deviceWidth, height: 200}}
                             resizeMode="contain"
+                            onError={e => {
+                                this._answerImageRef.setNativeProps({style: {display: 'none'}})
+                            }}
                             source={{uri: `${externalImagePath}/${questionItem.id}-solution.png`}}/>
                     }
                 </ScrollView>

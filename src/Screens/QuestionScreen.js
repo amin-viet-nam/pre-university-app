@@ -1,5 +1,4 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {Alert, Dimensions, FlatList, Text, View} from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
@@ -209,7 +208,7 @@ export default class QuestionScreen extends React.Component {
 
     gotoPage(page) {
         const currentTime = new Date().getTime();
-        if (currentTime - this.state.lastGotoPageTime > 500) {
+        if (currentTime - this.state.lastGotoPageTime > 100) {
             this.setState({currentPage: page, lastGotoPageTime: currentTime})
         } else {
             Alert.alert('Thông báo', 'Bạn thực hiện thao tác quá nhanh , Vui lòng thực hiện chậm lại');
@@ -379,11 +378,9 @@ export default class QuestionScreen extends React.Component {
             return (<Text>Đang tải dữ liệu ...</Text>)
         }
         return (
-            <View style={{flex: 1}}>
-                <SafeAreaView style={{flex: 1, backgroundColor: '#fafafa'}}>
-                    {this.renderBookMark()}
-                    {this.renderViewPage()}
-                </SafeAreaView>
+            <View style={{flex: 1, backgroundColor: '#fafafa'}}>
+                {this.renderBookMark()}
+                {this.renderViewPage()}
                 {this.renderBottomBar()}
             </View>
         );

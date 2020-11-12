@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Dimensions, Image, Text, View} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {Layout, Radio, RadioGroup} from '@ui-kitten/components';
 import katex from 'katex';
@@ -71,6 +71,7 @@ export default class QuestionItemComponent extends React.Component {
     render() {
         const {questionItem, questionIndex, answered} = this.state;
         const {showQuestionAnswer, useKatexHtmlInject} = this.props;
+        const externalImagePath = 'https://storage.googleapis.com/amin-2020/image';
         if (!questionItem) {
             return <Text>questionItem and questionIndex are required</Text>
         }
@@ -80,6 +81,7 @@ export default class QuestionItemComponent extends React.Component {
 
         let hasSolutionImage = questionItem.hasSolutionImage;
         let hasQuestionImage = questionItem.hasQuestionImage;
+        const deviceWidth = Dimensions.get("window").width;
 
         if (useKatexHtmlInject) {
             ask = this.katexStringReplace(questionItem.ask);
@@ -94,6 +96,13 @@ export default class QuestionItemComponent extends React.Component {
                         useKatexHtmlInject={useKatexHtmlInject}
                         katexWebviewStyles={{height: 70}}
                     />
+                    {
+                        hasQuestionImage &&
+                        <Image
+                            style={{width: deviceWidth, height: 200}}
+                            resizeMode="contain"
+                            source={{uri: `${externalImagePath}/${questionItem.id}-question.png`}}/>
+                    }
                     <View>
                         <RadioGroup
                             selectedIndex={showQuestionAnswer ? questionItem.answer : answered}
@@ -153,7 +162,13 @@ export default class QuestionItemComponent extends React.Component {
                             />
                         </View>
                     }
-
+                    {
+                        showQuestionAnswer && hasSolutionImage &&
+                        <Image
+                            style={{width: deviceWidth, height: 200}}
+                            resizeMode="contain"
+                            source={{uri: `${externalImagePath}/${questionItem.id}-solution.png`}}/>
+                    }
                 </ScrollView>
             </Layout>
         )

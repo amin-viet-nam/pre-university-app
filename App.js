@@ -1,4 +1,8 @@
 import { AppLoading } from 'expo';
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import * as Permissions from 'expo-permissions';
+
 import React, { Component } from 'react';
 import {StatusBar} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -21,6 +25,16 @@ import AboutMeScreen from './src/Screens/AboutMeScreen';
 
 const Stack = createStackNavigator();
 
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
+
 export default class App extends Component {
   state = {
     isReady: false,
@@ -37,14 +51,63 @@ export default class App extends Component {
       .then((rawData) => {
         if (rawData === null) {
             const defaultReminder = {
-                selectedDayInWeek: [0,2,3,4],
+                selectedDayInWeek: [1,2,4,5],
                 reminderTime : 38700000
             };
             AsyncStorage.setItem('user_reminder', JSON.stringify(defaultReminder));
         }
       })
 
+    this.registerForPushNotificationsAsync().then(token => {
+      this.setState({
+        expoPushNotificationToken: token
+      })
+    });
+
+    const notificationListener = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
+
+    Notifications.removeNotificationSubscription(notificationListener);
+    Notifications.removeNotificationSubscription(responseListener);
+
     this.setState({ ...this.state, isReady: true });
+  }
+
+
+  async registerForPushNotificationsAsync() {
+    let token;
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+      let finalStatus = existingStatus;
+      if (existingStatus !== 'granted') {
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+      if (finalStatus !== 'granted') {
+        alert('Failed to get push token for push notification!');
+        return;
+      }
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      console.log(token);
+    } else {
+      alert('Must use physical device for Push Notifications');
+    }
+  
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+  
+    return token;
   }
 
   render() {

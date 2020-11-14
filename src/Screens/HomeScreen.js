@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import CategoryScreen from './CategoryScreen';
 import NotificationScreen from './NotificationScreen';
-import ProfileScreen from './ProfileScreen';
+import ReminderScreen from './ReminderScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,22 +26,22 @@ function TabBarComponent() {
                 }}
             />
             <Tab.Screen
+                name="Reminder"
+                component={ReminderScreen}
+                options={{
+                    tabBarLabel: 'Nhắc học bài',
+                    tabBarIcon: ({color, size}) => (
+                        <MaterialCommunityIcons name="alarm" color={color} size={size}/>
+                    ),
+                }}
+            />
+            <Tab.Screen
                 name="Notifications"
                 component={NotificationScreen}
                 options={{
                     tabBarLabel: 'Thông Báo',
                     tabBarIcon: ({color, size}) => (
                         <MaterialCommunityIcons name="bell" color={color} size={size}/>
-                    ),
-                }}
-            />
-            <Tab.Screen
-                name="Profile"
-                component={ProfileScreen}
-                options={{
-                    tabBarLabel: 'Cá Nhân',
-                    tabBarIcon: ({color, size}) => (
-                        <MaterialCommunityIcons name="account" color={color} size={size}/>
                     ),
                 }}
             />

@@ -1,12 +1,15 @@
 import React from 'react';
-import {Alert, Dimensions, FlatList, Text, View} from 'react-native';
+import {Alert, Dimensions, FlatList, Text, View, Animated} from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import base64 from 'react-native-base64'
 import {AppContext} from '../Contexts/AppContext';
 import firebase from '../DataStorages/FirebaseApp';
 import QuestionItemComponent from '../Components/QuestionItemComponent';
+import WatchTimerComponent from '../Components/WatchTimerComponent';
 import {MyViewPagerComponent} from '../Components/MyViewPagerComponent';
+
+
 import CryptoJS from 'crypto-js';
 
 const dz = CryptoJS.Rabbit.decrypt;
@@ -36,7 +39,7 @@ export default class QuestionScreen extends React.Component {
             currentPage: 0,
             lastGotoPageTime: new Date().getTime(),
             answeredQuestions: {},
-            autoEndQuestion: true,
+            endQuestionConfirmAskingDisplay: true,
             showAllAnswers: false,
         };
 
@@ -106,7 +109,7 @@ export default class QuestionScreen extends React.Component {
         this.setState({
             showAllAnswers: true
         }, () => {
-            Alert.alert('Chấm điểm', `Điểm số của bạn là : ${totalScore}`);
+            Alert.alert('Kết quả thi', `Điểm số của bạn là : ${totalScore}`);
         });
     }
 
@@ -143,7 +146,7 @@ export default class QuestionScreen extends React.Component {
             },
             currentPage: nextPage !== -1 ? nextPage : currentPage
         }, () => {
-            if (nextPage === -1 && this.state.autoEndQuestion) {
+            if (nextPage === -1 && this.state.endQuestionConfirmAskingDisplay) {
                 this.showAlertEndQuestionConfirm();
             }
         });
@@ -160,7 +163,7 @@ export default class QuestionScreen extends React.Component {
                         text: "Làm tiếp nha",
                         onPress: () => {
                             this.setState({
-                                autoEndQuestion: false
+                                endQuestionConfirmAskingDisplay: false
                             })
                         },
                         style: "cancel"
@@ -168,7 +171,7 @@ export default class QuestionScreen extends React.Component {
                     {
                         text: "Nộp bài thi", onPress: () => {
                             this.setState({
-                                autoEndQuestion: false
+                                endQuestionConfirmAskingDisplay: false
                             }, () => {
                                 this.handleEndAllQuestion();
                             })
@@ -186,7 +189,7 @@ export default class QuestionScreen extends React.Component {
                         text: "Chưa sẵn sàng",
                         onPress: () => {
                             this.setState({
-                                autoEndQuestion: false
+                                endQuestionConfirmAskingDisplay: false
                             })
                         },
                         style: "cancel"
@@ -194,7 +197,7 @@ export default class QuestionScreen extends React.Component {
                     {
                         text: "Chấm điểm", onPress: () => {
                             this.setState({
-                                autoEndQuestion: false
+                                endQuestionConfirmAskingDisplay: false
                             }, () => {
                                 this.handleEndAllQuestion();
                             })
@@ -212,6 +215,37 @@ export default class QuestionScreen extends React.Component {
             this.setState({currentPage: page, lastGotoPageTime: currentTime})
         } else {
             Alert.alert('Thông báo', 'Bạn thực hiện thao tác quá nhanh , Vui lòng thực hiện chậm lại');
+        }
+    }
+
+    renderTimer() {
+        const {showAllAnswers, categoryItem} = this.state;
+        const category = categoryItem.category;
+        
+        let secondsToFinish;
+        switch(category) {
+            case 'math':
+                secondsToFinish = 90 * 60;
+                break;
+            case 'literary':
+                secondsToFinish = 120 * 60;
+                break;
+            case 'english':
+                secondsToFinish = 120 * 60;
+                break;
+            default:
+                secondsToFinish = 50 * 60;
+        }
+        
+        if (showAllAnswers === false) {
+            return (
+                <WatchTimerComponent
+                    endTime={(Date.now() / 1000) + secondsToFinish}
+                    timeUp={() => {
+                        this.handleEndAllQuestion();
+                    }}
+                />
+            )
         }
     }
 
@@ -381,6 +415,7 @@ export default class QuestionScreen extends React.Component {
             <View style={{flex: 1, backgroundColor: '#fafafa'}}>
                 {this.renderBookMark()}
                 {this.renderViewPage()}
+                {this.renderTimer()}
                 {this.renderBottomBar()}
             </View>
         );

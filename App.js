@@ -1,5 +1,6 @@
 import { AppLoading } from 'expo';
 import React, { Component } from 'react';
+import {StatusBar} from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
@@ -51,6 +52,9 @@ export default class App extends Component {
                 <Stack.Screen name="AboutMeScreen" component={AboutMeScreen}/>
               </Stack.Navigator>
             </NavigationContainer>
+            <StatusBar
+              barStyle="dark-content"
+            />
             <Spinner
                 visible={this.state.loading}
                 textStyle={{color: '#fff'}}

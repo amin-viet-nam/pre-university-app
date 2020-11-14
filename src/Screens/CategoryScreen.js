@@ -1,9 +1,9 @@
 import React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {FlatList, Text, View} from 'react-native';
-import {Card} from '@ui-kitten/components';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, Text, View } from 'react-native';
+import { Card } from '@ui-kitten/components';
 import Ripple from 'react-native-material-ripple';
-import {MaterialCommunityIcons} from 'react-native-vector-icons';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import NavigatorService from '../../src/Services/NavigatorService';
 
 export default class CategoryScreen extends React.Component {
@@ -52,38 +52,39 @@ export default class CategoryScreen extends React.Component {
 
     categoryItemOnClick(item) {
         console.log('categoryItemOnClick: ', item);
-        NavigatorService.navigate('CategoryDetailScreen', {item});
+        NavigatorService.navigate('CategoryDetailScreen', { item });
     }
 
     render() {
-        const {categoryList} = this.state;
+        const { categoryList } = this.state;
         return (
-            <SafeAreaView style={{justifyContent: 'center', flex: 1, padding: 4, backgroundColor: '#f8bbd0'}}>
+            <SafeAreaView style={{ justifyContent: 'center', flex: 1, padding: 4, backgroundColor: '#f8bbd0' }}>
                 <FlatList
+                    scrollEnabled={false}
                     data={categoryList}
                     numColumns={2}
                     keyExtractor={(item, index) => index}
-                    renderItem={({item, index}) => (
-                        <View style={{flex: 1, flexDirection: 'column', margin: 4}}>
-                            <Card
-                                style={{
-                                    margin: 4,
-                                    backgroundColor: 'white',
-                                    borderRadius: 4,
-                                    shadowColor: "#000",
-                                    shadowOffset: {width: 0, height: 2,},
-                                    shadowOpacity: 0.25,
-                                    shadowRadius: 3.84,
-                                    elevation: 5,
-                                }}
-                            >
-                                <Ripple style={{padding: 16}} onPress={() => this.categoryItemOnClick(item)}>
-                                    <MaterialCommunityIcons name={item.icon} size={50} style={{textAlign: 'center'}}/>
-                                    <Text style={{fontSize: 20, textAlign: 'center'}}>
+                    renderItem={({ item, index }) => (
+                        <View style={{ flex: 1, flexDirection: 'column', margin: 4 }}>
+                            <Ripple style={{ padding: 0 }} onPress={() => this.categoryItemOnClick(item)}>
+                                <Card
+                                    style={{
+                                        margin: 4,
+                                        backgroundColor: 'white',
+                                        borderRadius: 4,
+                                        shadowColor: "#000",
+                                        shadowOffset: { width: 0, height: 2, },
+                                        shadowOpacity: 0.25,
+                                        shadowRadius: 3.84,
+                                        elevation: 5,
+                                    }}
+                                >
+                                    <MaterialCommunityIcons name={item.icon} size={50} style={{ textAlign: 'center' }} />
+                                    <Text style={{ fontSize: 20, textAlign: 'center' }}>
                                         {item.text}
                                     </Text>
-                                </Ripple>
-                            </Card>
+                                </Card>
+                            </Ripple>
                         </View>
                     )}
                 />

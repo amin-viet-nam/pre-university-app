@@ -63,7 +63,7 @@ export default class CategoryScreen extends React.Component {
                     scrollEnabled={false}
                     data={categoryList}
                     numColumns={2}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item, index) => `category-item-${index}`}
                     renderItem={({ item, index }) => (
                         <View style={{ flex: 1, flexDirection: 'column', margin: 4 }}>
                             <Ripple style={{ padding: 0 }} onPress={() => this.categoryItemOnClick(item)}>

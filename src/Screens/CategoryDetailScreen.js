@@ -111,7 +111,7 @@ export default class CategoryDetailScreen extends React.Component {
                 <FlatList
                     data={categoryDetailList}
                     numColumns={3}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item, index) => `category-detail-item-${index}`}
                     renderItem={({ item }) => (
                         <View style={{ flex: 1, flexDirection: 'column', margin: 4 }}>
                             <Ripple style={{ padding: 0 }} onPress={() => this.categoryDetailItemClick(item)}>

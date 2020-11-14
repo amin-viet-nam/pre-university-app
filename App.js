@@ -6,6 +6,7 @@ import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {AppContext} from './src/Contexts/AppContext';
 
@@ -32,6 +33,17 @@ export default class App extends Component {
   };
 
   async componentDidMount() {
+     AsyncStorage.getItem('user_reminder')
+      .then((rawData) => {
+        if (rawData === null) {
+            const defaultReminder = {
+                selectedDayInWeek: [0,2,3,4],
+                reminderTime : 38700000
+            };
+            AsyncStorage.setItem('user_reminder', JSON.stringify(defaultReminder));
+        }
+      })
+
     this.setState({ ...this.state, isReady: true });
   }
 

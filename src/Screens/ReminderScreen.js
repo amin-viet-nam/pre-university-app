@@ -6,30 +6,68 @@ import Ripple from 'react-native-material-ripple';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
 import NavigatorService from '../../src/Services/NavigatorService';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class ReminderScreen extends React.Component {
     constructor(props) {
         super(props);
-        let dateInWeekLabels = [
-            { index: 0, text: 'Mọi thứ Hai', },
-            { index: 1, text: 'Mọi thứ Ba' },
-            { index: 2, text: 'Mọi thứ Tư' },
-            { index: 3, text: 'Mọi thứ Năm' },
-            { index: 4, text: 'Mọi thứ Sáu' },
-            { index: 5, text: 'Mọi thứ Bảy' },
-            { index: 6, text: 'Mọi Chủ Nhật' },
-        ];
-        dateInWeekLabels[0].checked = true;
-        dateInWeekLabels[3].checked = true;
+
         this.state = {
-            dateInWeekLabels,
-            reminderTime : new Date(1598051730000)
+            dayInWeekLabels: [
+                { id: 0, text: 'Mọi thứ Hai', },
+                { id: 1, text: 'Mọi thứ Ba' },
+                { id: 2, text: 'Mọi thứ Tư' },
+                { id: 3, text: 'Mọi thứ Năm' },
+                { id: 4, text: 'Mọi thứ Sáu' },
+                { id: 5, text: 'Mọi thứ Bảy' },
+                { id: 6, text: 'Mọi Chủ Nhật' },
+            ],
+            reminderTime : 0
         }
     }
 
+    componentDidMount() {
+        AsyncStorage.getItem('user_reminder')
+            .then((rawData) => {
+                if (rawData !== null) {
+                    const savedData = JSON.parse(rawData);
+                    const {selectedDayInWeek, reminderTime} = savedData;
+                    console.log(savedData);
+    
+                    const {dayInWeekLabels} = this.state;
+    
+                    for (let i = 0; i < dayInWeekLabels.length; i++) {
+                        const element = dayInWeekLabels[i];
+                        if (selectedDayInWeek.includes(element.id)) {
+                            dayInWeekLabels[i].checked = true
+                        }
+                    }
+    
+                    this.setState({
+                        dayInWeekLabels,
+                        reminderTime
+                    })
+                }
+            })
+
+    }
+
+    updateAndSaveReminderData() {
+        const {dayInWeekLabels, reminderTime} = this.state;
+
+        const selectedDayInWeek = dayInWeekLabels.filter(f => f.checked === true)
+            .map(m => m.id);
+
+        const updatedReminder = {
+            selectedDayInWeek,
+            reminderTime
+        };
+
+        AsyncStorage.setItem('user_reminder', JSON.stringify(updatedReminder));        
+    }
+
     render() {
-        const { dateInWeekLabels, reminderTime } = this.state;
+        const { dayInWeekLabels, reminderTime } = this.state;
         const deviceWidth = Dimensions.get("window").width;
 
         return (
@@ -42,9 +80,9 @@ export default class ReminderScreen extends React.Component {
                         flexGrow: 0
                     }}
                     scrollEnabled={false}
-                    data={dateInWeekLabels}
+                    data={dayInWeekLabels}
                     numColumns={1}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item, index) => `reminder-sc-item-${index}`}
                     renderItem={({ item, index }) => (
                         <View style={{
                             flex: 1,
@@ -54,9 +92,11 @@ export default class ReminderScreen extends React.Component {
                             alignItems: 'center',
                         }}>
                             <Ripple style={{ padding: 0 }} onPress={() => {
-                                dateInWeekLabels[index].checked = !dateInWeekLabels[index].checked;
+                                dayInWeekLabels[index].checked = !dayInWeekLabels[index].checked;
                                 this.setState({
-                                    dateInWeekLabels: dateInWeekLabels
+                                    dayInWeekLabels: dayInWeekLabels
+                                }, () => {
+                                    this.updateAndSaveReminderData();
                                 })
                             }}>
                                 <Card
@@ -94,13 +134,15 @@ export default class ReminderScreen extends React.Component {
                 <View>
                     <DateTimePicker
                         testID="dateTimePicker"
-                        value={reminderTime}
+                        value={new Date(reminderTime)}
                         mode={'time'}
                         is24Hour={true}
                         display="default"
                         onChange={(event, selectedDate) => {
                             this.setState({
-                                reminderTime: selectedDate
+                                reminderTime: selectedDate.getTime()
+                            }, () => {
+                                this.updateAndSaveReminderData();
                             })
                         }}
                     />

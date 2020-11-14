@@ -298,7 +298,7 @@ export default class QuestionScreen extends React.Component {
                             </View>
                         );
                     }}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item, index) => `question-sc-item-${index}`}
                 />
             </View>
         )

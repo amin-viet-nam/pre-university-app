@@ -107,24 +107,27 @@ export default class ReminderScreen extends React.Component {
                 Notifications.cancelAllScheduledNotificationsAsync()
                     .then(() => {
                         for (let i = 0; i < selectedDayInWeek.length; i++) {
-                            for (let j = 1; j < 12; j++) {
+                            for (let j = 0; j < 12; j++) {
                                 const dayInWeek = selectedDayInWeek[i];
 
                                 const nextScheduled = moment(lastMonday).day(dayInWeek + (7 * j));
                                 nextScheduled.set({ hour: hour, minute: minute, second: 0, millisecond: 0 });
 
                                 const notifyAfter = nextScheduled.diff(moment(), 'seconds');
+                                if (notifyAfter > 0) {
 
-                                const quoteText = quotes[Math.floor(Math.random() * quotes.length)];
-                                Notifications.scheduleNotificationAsync({
-                                    content: {
-                                        title: "Amin luyện thi",
-                                        body: `Amin nhắc bạn học bài. Trích dẫn cho bạn: ${quoteText}.`
-                                    },
-                                    trigger: {
-                                        seconds: notifyAfter
-                                    }
-                                });
+                                    const quoteText = quotes[Math.floor(Math.random() * quotes.length)];
+                                    Notifications.scheduleNotificationAsync({
+                                        content: {
+                                            title: "Amin luyện thi THPT",
+                                            body: `Amin nhắc bạn học bài. Trích dẫn cho bạn: ${quoteText}.`
+                                        },
+                                        trigger: {
+                                            seconds: notifyAfter
+                                        }
+                                    });
+                                }
+
                             }
                         }
                     });
@@ -203,7 +206,7 @@ export default class ReminderScreen extends React.Component {
                         mode={'time'}
                         is24Hour={true}
                         display="default"
-                        onChange={(event, selectedDate) => {                            
+                        onChange={(event, selectedDate) => {
                             this.setState({
                                 reminderTime: selectedDate.getTime()
                             }, () => {

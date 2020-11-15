@@ -9,7 +9,12 @@
       "**/*"
     ],
     "android": {
-      "useNextNotificationsApi": true
+      "useNextNotificationsApi": true,
+      "package": "vn.amin.preuniversity_examination",
+      "googleServicesFile": "./google-services.json"
+    },
+    "ios": {
+      "bundleIdentifier": "vn.amin.preuniversityexamination"
     }
   }
 }

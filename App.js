@@ -2,9 +2,10 @@ import { AppLoading } from 'expo';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
+import firebase from './src/DataStorages/FirebaseApp';
 
 import React, { Component } from 'react';
-import {StatusBar} from 'react-native';
+import { StatusBar, Alert } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider } from '@ui-kitten/components';
@@ -12,7 +13,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {AppContext} from './src/Contexts/AppContext';
+import { AppContext } from './src/Contexts/AppContext';
 
 import NavigatorService from './src/Services/NavigatorService';
 
@@ -40,29 +41,23 @@ export default class App extends Component {
     isReady: false,
     loading: false,
     setLoading: (loading) => {
-      if(this.state.loading !== loading) {
+      if (this.state.loading !== loading) {
         this.setState({ loading });
       }
     }
   };
 
   async componentDidMount() {
-     AsyncStorage.getItem('user_reminder')
+    AsyncStorage.getItem('user_reminder')
       .then((rawData) => {
         if (rawData === null) {
-            const defaultReminder = {
-                selectedDayInWeek: [1,2,4,5],
-                reminderTime : 38700000
-            };
-            AsyncStorage.setItem('user_reminder', JSON.stringify(defaultReminder));
+          const defaultReminder = {
+            selectedDayInWeek: [1, 2, 4, 5],
+            reminderTime: 38700000
+          };
+          AsyncStorage.setItem('user_reminder', JSON.stringify(defaultReminder));
         }
       })
-
-    this.registerForPushNotificationsAsync().then(token => {
-      this.setState({
-        expoPushNotificationToken: token
-      })
-    });
 
     const notificationListener = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
@@ -75,9 +70,34 @@ export default class App extends Component {
     Notifications.removeNotificationSubscription(notificationListener);
     Notifications.removeNotificationSubscription(responseListener);
 
-    this.setState({ ...this.state, isReady: true });
+    this.anonymousFirebaseLogin();
   }
 
+  anonymousFirebaseLogin() {
+    firebase.auth().signInAnonymously()
+      .then((auth) => {
+        this.setState({ ...this.state, isReady: true }, () => {
+          this.registerForPushNotificationsAsync().then(token => {
+            if (token) {
+              firebase.database().ref(`users/${auth.user.uid}`)
+                .set({
+                  expoPushToken: token
+                })
+            }
+          });
+        });
+      })
+      .catch(function (error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        Alert.alert(`Xảy ra lỗi', 'Đã xảy ra lỗi khi xác thực người dùng, mã lỗi : ${errorCode} - ${errorMessage}`);
+
+        setTimeout(() => {
+          this.anonymousFirebaseLogin()
+        }, 5000)
+      });
+
+  }
 
   async registerForPushNotificationsAsync() {
     let token;
@@ -89,15 +109,15 @@ export default class App extends Component {
         finalStatus = status;
       }
       if (finalStatus !== 'granted') {
-        alert('Failed to get push token for push notification!');
+        console.log('Failed to get push token for push notification!');
         return;
       }
       token = (await Notifications.getExpoPushTokenAsync()).data;
       console.log(token);
     } else {
-      alert('Must use physical device for Push Notifications');
+      console.log('Must use physical device for Push Notifications');
     }
-  
+
     if (Platform.OS === 'android') {
       Notifications.setNotificationChannelAsync('default', {
         name: 'default',
@@ -106,7 +126,7 @@ export default class App extends Component {
         lightColor: '#FF231F7C',
       });
     }
-  
+
     return token;
   }
 
@@ -120,22 +140,22 @@ export default class App extends Component {
           <AppContext.Provider value={this.state}>
             <NavigationContainer ref={(el) => NavigatorService.setContainer(el)}>
               <Stack.Navigator initialRouteName="Home">
-                <Stack.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
-                <Stack.Screen name="CategoryScreen" component={CategoryScreen}/>
-                <Stack.Screen name="CategoryDetailScreen" component={CategoryDetailScreen}/>
-                <Stack.Screen name="QuestionScreen" component={QuestionScreen}/>
-                <Stack.Screen name="AboutMeScreen" component={AboutMeScreen}/>
+                <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+                <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
+                <Stack.Screen name="CategoryDetailScreen" component={CategoryDetailScreen} />
+                <Stack.Screen name="QuestionScreen" component={QuestionScreen} />
+                <Stack.Screen name="AboutMeScreen" component={AboutMeScreen} />
               </Stack.Navigator>
             </NavigationContainer>
             <StatusBar
               barStyle="dark-content"
             />
             <Spinner
-                visible={this.state.loading}
-                textStyle={{color: '#fff'}}
-                cancelable={true}
-                textContent={'Đang Tải...'}
-              />          
+              visible={this.state.loading}
+              textStyle={{ color: '#fff' }}
+              cancelable={true}
+              textContent={'Đang Tải...'}
+            />
           </AppContext.Provider>
         </SafeAreaProvider>
       </ApplicationProvider>

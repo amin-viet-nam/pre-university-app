@@ -1,11 +1,49 @@
 import Constants from 'expo-constants';
 import {Platform} from 'react-native';
+import AsyncStorageUtils from "./AsyncStorageUtils";
 
 const isTestPlatform = Constants.isDevice && __DEV__;
 const isAndroidDevice = Platform.OS === 'android';
 const isIosDevice = Platform.OS === 'ios';
 
-const AdmobUtils = {};
+
+const AdmobUtils = {
+    shouldShowBannerAds: () => {
+        return new Promise(resolve => {
+            resolve(true);
+        })
+    },
+    shouldShowInterstitialAds: (waitingSecondsBeforeLastShown) => {
+        return Promise.all([
+            AsyncStorageUtils.getItemObject('ads_counter'),
+            AsyncStorageUtils.getItemObject('ads_last_show')
+        ]).then(([adsCounter, adsLastShow]) => {
+            const currentTime = new Date().getTime();
+
+            console.log(`timeLeft: ${currentTime - adsLastShow}, counter: ${adsCounter}`)
+            if (currentTime - adsLastShow < waitingSecondsBeforeLastShown * 1000) {
+                console.log(`hide ads because of currentTime - adsLastShow 
+                < waitingSecondsBeforeLastShown * 1000 : ${waitingSecondsBeforeLastShown * 1000}`)
+                return false;
+            }
+
+            if (currentTime - adsLastShow < 5 * 60 * 1000) {
+                if (adsCounter <= 5) {
+                    AsyncStorageUtils.saveItemObject('ads_counter', adsCounter + 1);
+                    AsyncStorageUtils.saveItemObject('ads_last_show', currentTime);
+                    return true;
+                } else {
+                    console.log(`hide ads because of frequently show`)
+                    return false;
+                }
+            } else {
+                AsyncStorageUtils.saveItemObject('ads_counter', 1);
+                AsyncStorageUtils.saveItemObject('ads_last_show', currentTime);
+                return true;
+            }
+        });
+    }
+};
 
 if (isAndroidDevice) {
     if (isTestPlatform) {

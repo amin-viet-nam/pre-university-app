@@ -59,15 +59,20 @@ export default class CategoryScreen extends React.Component {
 
     renderAdmob() {
         console.log(AdmobUtils);
-        return (
-            <AdMobBanner
-                bannerSize="fullBanner"
-                adUnitID={AdmobUtils.bannerAds}
-                servePersonalizedAds
-                onDidFailToReceiveAdWithError={(err) => {
-                    console.error('load banner ads error', err)
-                }} />
-        );
+        AdmobUtils.shouldShowBannerAds().then(ok => {
+            if (ok) {
+                return (
+                    <AdMobBanner
+                        bannerSize="fullBanner"
+                        adUnitID={AdmobUtils.bannerAds}
+                        servePersonalizedAds
+                        onDidFailToReceiveAdWithError={(err) => {
+                            console.error('load banner ads error', err)
+                        }} />
+                );
+            }
+        })
+        return (<View/>);
     }
 
     render() {

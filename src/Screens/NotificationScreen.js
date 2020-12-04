@@ -62,7 +62,7 @@ export default class NotificationScreen extends React.Component {
 
         const ref = firebase.database().ref(`publicNotifications`)
             .orderByChild('reverseDate')
-            .limitToLast(2);
+            .limitToLast(10);
 
         if (startAt !== null) {
             ref.startAt(startAt)
@@ -89,37 +89,38 @@ export default class NotificationScreen extends React.Component {
     }
 
     renderFooterLoadMore() {
-        const {loading, dataSource, size} = this.state;
-
-        if (dataSource.length < size) {
-            return <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <Text>...</Text>
-            </View>
-        }
-
-        return (
-            //Footer View with Load More button
-            <View style={styles.footer}>
-                <TouchableOpacity
-                    activeOpacity={0.9}
-                    onPress={() => {
-                        this.setState({
-                            loading: true
-                        }, () => {
-                            this.loadData()
-                        })
-                    }}
-                    //On Click of button load more data
-                    style={styles.loadMoreBtn}>
-                    <Text style={styles.btnText}>Load More</Text>
-                    {loading ? (
-                        <ActivityIndicator
-                            color="white"
-                            style={{marginLeft: 8}}/>
-                    ) : null}
-                </TouchableOpacity>
-            </View>
-        );
+        // const {loading, dataSource, size} = this.state;
+        //
+        // if (dataSource.length < size) {
+        //     return <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        //         <Text>...</Text>
+        //     </View>
+        // }
+        //
+        // return (
+        //     //Footer View with Load More button
+        //     <View style={styles.footer}>
+        //         <TouchableOpacity
+        //             activeOpacity={0.9}
+        //             onPress={() => {
+        //                 this.setState({
+        //                     loading: true
+        //                 }, () => {
+        //                     this.loadData()
+        //                 })
+        //             }}
+        //             //On Click of button load more data
+        //             style={styles.loadMoreBtn}>
+        //             <Text style={styles.btnText}>Load More</Text>
+        //             {loading ? (
+        //                 <ActivityIndicator
+        //                     color="white"
+        //                     style={{marginLeft: 8}}/>
+        //             ) : null}
+        //         </TouchableOpacity>
+        //     </View>
+        // );
+        return (<View/>);
     };
 
     render() {

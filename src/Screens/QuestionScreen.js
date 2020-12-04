@@ -8,7 +8,8 @@ import firebase from '../DataStorages/FirebaseApp';
 import QuestionItemComponent from '../Components/QuestionItemComponent';
 import WatchTimerComponent from '../Components/WatchTimerComponent';
 import {MyViewPagerComponent} from '../Components/MyViewPagerComponent';
-
+import {AdMobRewarded,} from 'expo-ads-admob';
+import AdmobUtils from "../Utils/AdmobUtils";
 
 import CryptoJS from 'crypto-js';
 
@@ -79,6 +80,15 @@ export default class QuestionScreen extends React.Component {
                     }, () => {
                         setTimeout(() => {
                             this.context.setLoading(false);
+                            console.log(AdmobUtils);
+                            AdmobUtils.shouldShowInterstitialAds(30)
+                                .then(async (ok) => {
+                                    if (ok) {
+                                        await AdMobRewarded.setAdUnitID(AdmobUtils.interstitialAds);
+                                        await AdMobRewarded.requestAdAsync();
+                                        await AdMobRewarded.showAdAsync();
+                                    }
+                                })
                         }, 500);
                         this.props.navigation.setOptions({
                             title: `Giải Đề ${this.categoryShortTitleMap[categoryItem.category]} ${this.state.categoryDetailItem.name}`,

@@ -6,6 +6,8 @@ import katex from 'katex';
 import AnswerItemComponent from './AnswerItemComponent';
 import WebviewKatexComponent from './WebviewKatexComponent';
 import katexStyle from '../../library/katex/katex-style';
+import AdmobUtils from "../Utils/AdmobUtils";
+import {AdMobRewarded} from "expo-ads-admob";
 
 export default class QuestionItemComponent extends React.Component {
     constructor(props) {
@@ -22,6 +24,18 @@ export default class QuestionItemComponent extends React.Component {
             },
             isAllKatexComponentLoaded: true
         }
+    }
+
+    componentDidMount() {
+        console.log(AdmobUtils);
+        AdmobUtils.shouldShowInterstitialAds(900)
+            .then(async (ok) => {
+                if (ok) {
+                    await AdMobRewarded.setAdUnitID(AdmobUtils.interstitialAds);
+                    await AdMobRewarded.requestAdAsync();
+                    await AdMobRewarded.showAdAsync();
+                }
+            })
     }
 
     shouldComponentUpdate(nextProps, nextState, nextContext) {

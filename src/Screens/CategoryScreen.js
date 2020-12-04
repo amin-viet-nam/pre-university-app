@@ -5,6 +5,8 @@ import {Card} from '@ui-kitten/components';
 import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from 'react-native-vector-icons';
 import NavigatorService from '../../src/Services/NavigatorService';
+import AdmobUtils from "../Utils/AdmobUtils";
+import {AdMobBanner} from "expo-ads-admob";
 
 export default class CategoryScreen extends React.Component {
     constructor(props) {
@@ -55,6 +57,19 @@ export default class CategoryScreen extends React.Component {
         NavigatorService.navigate('CategoryDetailScreen', {item});
     }
 
+    renderAdmob() {
+        console.log(AdmobUtils);
+        return (
+            <AdMobBanner
+                bannerSize="fullBanner"
+                adUnitID={AdmobUtils.bannerAds}
+                servePersonalizedAds
+                onDidFailToReceiveAdWithError={(err) => {
+                    console.error('load banner ads error', err)
+                }} />
+        );
+    }
+
     render() {
         const {categoryList} = this.state;
         return (
@@ -88,6 +103,7 @@ export default class CategoryScreen extends React.Component {
                         </View>
                     )}
                 />
+                {this.renderAdmob()}
             </SafeAreaView>
         );
     }

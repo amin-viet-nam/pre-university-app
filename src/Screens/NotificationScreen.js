@@ -1,6 +1,6 @@
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, ItemSeparatorView } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {ActivityIndicator, FlatList, ItemSeparatorView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import firebase from '../../src/DataStorages/FirebaseApp';
 
 const styles = StyleSheet.create({
@@ -55,7 +55,7 @@ export default class NotificationScreen extends React.Component {
     }
 
     loadData() {
-        const { startAt, size, dataSource } = this.state;
+        const {startAt, size, dataSource} = this.state;
         const user = firebase.auth().currentUser;
 
         let newDataSource = dataSource.filter(m => m.id === -1);
@@ -69,7 +69,7 @@ export default class NotificationScreen extends React.Component {
         }
 
         ref.once('value', snapshot => {
-            this.setState({ loading: false })
+            this.setState({loading: false})
             const data = snapshot.val();
             if (data) {
                 for (const key in data) {
@@ -89,10 +89,10 @@ export default class NotificationScreen extends React.Component {
     }
 
     renderFooterLoadMore() {
-        const { loading, dataSource, size } = this.state;
+        const {loading, dataSource, size} = this.state;
 
         if (dataSource.length < size) {
-            return <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            return <View style={{justifyContent: 'center', alignItems: 'center'}}>
                 <Text>...</Text>
             </View>
         }
@@ -115,7 +115,7 @@ export default class NotificationScreen extends React.Component {
                     {loading ? (
                         <ActivityIndicator
                             color="white"
-                            style={{ marginLeft: 8 }} />
+                            style={{marginLeft: 8}}/>
                     ) : null}
                 </TouchableOpacity>
             </View>
@@ -123,10 +123,10 @@ export default class NotificationScreen extends React.Component {
     };
 
     render() {
-        const { dataSource, loading, size } = this.state;
+        const {dataSource, loading, size} = this.state;
 
         return (
-            <SafeAreaView style={{ flex: 1, padding: 4, backgroundColor: '#fafafa' }}>
+            <SafeAreaView style={{flex: 1, padding: 4, backgroundColor: '#fafafa'}}>
                 <View style={styles.container}>
                     <FlatList
                         data={dataSource}
@@ -137,7 +137,7 @@ export default class NotificationScreen extends React.Component {
                             const item = data.item;
                             return (
                                 <View style={styles.itemStyle}>
-                                    <Text style={{ fontSize: 20 }}>{item.title}</Text>
+                                    <Text style={{fontSize: 20}}>{item.title}</Text>
                                     <Text>{item.content}</Text>
                                     <View
                                         style={{

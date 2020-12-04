@@ -3672,6 +3672,13 @@ expect@^25.5.0:
     jest-message-util "^25.5.0"
     jest-regex-util "^25.2.6"
 
+expo-ads-admob@~8.2.1:
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/expo-ads-admob/-/expo-ads-admob-8.2.1.tgz#55afdbb9986dc2d9d97a67c65e21d880b40bf468"
+  integrity sha512-el5DlWpetcyWT52fnYxxlFHkTAjcBgymxKbbHmvLCinz0jCZXEip2OtdktZxVlmTwFgI2Vn13Szdw55OpluW8w==
+  dependencies:
+    prop-types "^15.6.2"
+
 expo-application@~2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/expo-application/-/expo-application-2.2.1.tgz#f14b83ae0b07e4922850f8856a56f141c168d6d0"
@@ -3692,6 +3699,14 @@ expo-constants@9.1.1, expo-constants@~9.1.1:
   version "9.1.1"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-9.1.1.tgz#bca141ee3d4550e308798128f66c6d9c6a206ca1"
   integrity sha512-zCa/wRARODHd6BSwxjBhidmao0AqQnKmLkl0tsVIoZlRyPDHsEaxNR/m+7wqGC7qiC+UpG1qRnvLOLwCGt2ihg==
+  dependencies:
+    fbjs "1.0.0"
+    uuid "^3.3.2"
+
+expo-constants@^9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-9.2.0.tgz#e86a38793deaff9018878afac65bce2543c80a4c"
+  integrity sha512-WKwiEMvBgPrEPEyZKm21UUB2KWQux9OCWf6ZDORLTln7kO3rsbaJEprfWUWTP7AxyaLMYfN+/0WFHjZc25SZWQ==
   dependencies:
     fbjs "1.0.0"
     uuid "^3.3.2"
@@ -7006,18 +7021,6 @@ react-native-gesture-handler@~1.6.0:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.4"
     prop-types "^15.7.2"
-
-react-native-gifted-listview@0.0.15:
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/react-native-gifted-listview/-/react-native-gifted-listview-0.0.15.tgz#c92b5b7b32cea7705b727ab4bc199751379dce07"
-  integrity sha1-yStbezLOp3Bbcnq0vBmXUTedzgc=
-  dependencies:
-    react-native-gifted-spinner "^0.0.4"
-
-react-native-gifted-spinner@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-gifted-spinner/-/react-native-gifted-spinner-0.0.4.tgz#32652b5a60423f14719a1c3125613299af0995f2"
-  integrity sha1-MmUrWmBCPxRxmhwxJWEyma8JlfI=
 
 react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"

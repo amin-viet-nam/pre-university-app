@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Dimensions, FlatList, Text, View, Animated} from 'react-native';
+import {Alert, Dimensions, FlatList, Text, View} from 'react-native';
 import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import base64 from 'react-native-base64'
@@ -221,9 +221,9 @@ export default class QuestionScreen extends React.Component {
     renderTimer() {
         const {showAllAnswers, categoryItem} = this.state;
         const category = categoryItem.category;
-        
+
         let secondsToFinish;
-        switch(category) {
+        switch (category) {
             case 'math':
                 secondsToFinish = 90 * 60;
                 break;
@@ -236,7 +236,7 @@ export default class QuestionScreen extends React.Component {
             default:
                 secondsToFinish = 50 * 60;
         }
-        
+
         if (showAllAnswers === false) {
             return (
                 <WatchTimerComponent

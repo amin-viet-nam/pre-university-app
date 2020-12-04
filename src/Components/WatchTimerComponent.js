@@ -1,6 +1,6 @@
 import React from "react";
-import { Text, View } from "react-native";
-import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
+import {Text, View} from "react-native";
+import {CountdownCircleTimer} from "react-native-countdown-circle-timer";
 
 const minuteSeconds = 60;
 const hourSeconds = 7200;
@@ -29,8 +29,8 @@ export default class WatchTimerComponent extends React.Component {
                 justifyContent: 'center',
                 alignItems: 'center'
             }}>
-                <Text style={{ fontSize: 11 }}>{time}</Text>
-                <Text style={{ fontSize: 11 }}>{dimension}</Text>
+                <Text style={{fontSize: 11}}>{time}</Text>
+                <Text style={{fontSize: 11}}>{dimension}</Text>
             </View>
         );
     };
@@ -38,7 +38,7 @@ export default class WatchTimerComponent extends React.Component {
     render() {
         const {startTime, endTime} = this.state;
         const remainingTime = endTime - startTime;
-        
+
         return (
             <View style={{
                 flexDirection: 'row',
@@ -52,7 +52,7 @@ export default class WatchTimerComponent extends React.Component {
                             ['#f8bbd0', 0.4],
                             ['#F7B801', 0.4],
                             ['#A30000', 0.2],
-                          ]}
+                        ]}
                         duration={hourSeconds}
                         initialRemainingTime={remainingTime % hourSeconds}
                         onComplete={totalElapsedTime => [remainingTime - totalElapsedTime > minuteSeconds]}
@@ -60,7 +60,7 @@ export default class WatchTimerComponent extends React.Component {
                         size={45}
                         strokeWidth={3}
                     >
-                        {({ elapsedTime }) =>
+                        {({elapsedTime}) =>
                             this.renderTime(
                                 "phút",
                                 getTimeMinutes(hourSeconds - elapsedTime / 1000)
@@ -68,18 +68,18 @@ export default class WatchTimerComponent extends React.Component {
                         }
                     </CountdownCircleTimer>
                 </View>
-                <View style={{ marginLeft: 4 }}>
+                <View style={{marginLeft: 4}}>
                     <CountdownCircleTimer
                         colors={[
                             ['#f8bbd0', 0.4],
                             ['#F7B801', 0.4],
                             ['#A30000', 0.2],
-                          ]}
+                        ]}
                         duration={minuteSeconds}
                         initialRemainingTime={remainingTime % minuteSeconds}
                         onComplete={totalElapsedTime => {
                             const shouldContinue = remainingTime - totalElapsedTime > 0;
-                            if(shouldContinue === false && typeof this.props.timeUp === 'function') {
+                            if (shouldContinue === false && typeof this.props.timeUp === 'function') {
                                 this.props.timeUp();
                             }
                             return [shouldContinue]
@@ -88,7 +88,7 @@ export default class WatchTimerComponent extends React.Component {
                         size={45}
                         strokeWidth={3}
                     >
-                        {({ elapsedTime }) =>
+                        {({elapsedTime}) =>
                             this.renderTime("giây", getTimeSeconds(elapsedTime))
                         }
                     </CountdownCircleTimer>

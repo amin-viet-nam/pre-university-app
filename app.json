@@ -11,10 +11,16 @@
     "android": {
       "useNextNotificationsApi": true,
       "package": "vn.amin.preuniversity_examination",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-3943461823819564~5670595085"
+      }
     },
     "ios": {
-      "bundleIdentifier": "vn.amin.preuniversityexamination"
+      "bundleIdentifier": "vn.amin.preuniversityexamination",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-3943461823819564~6534096525"
+      }
     }
   }
 }

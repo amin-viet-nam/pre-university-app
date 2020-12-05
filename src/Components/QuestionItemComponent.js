@@ -44,7 +44,7 @@ export default class QuestionItemComponent extends React.Component {
     }
 
     katexStringReplace(str) {
-        if (str === null) {
+        if (str === null || typeof str === 'undefined') {
             return null;
         }
 

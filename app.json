@@ -9,9 +9,12 @@
       "**/*"
     ],
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "assets/icon.png"
+      },
       "useNextNotificationsApi": true,
-      "package": "vn.amin.preuniversity_examination",
-      "googleServicesFile": "./google-services.json",
+      "package": "vn.amin.preuniversityexamination",
+      "googleServicesFile": "assets/google-services.json",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~5670595085"
       }

@@ -1,6 +1,6 @@
 import React from "react";
 import {WebView} from "react-native-webview";
-import HTML from "react-native-render-html";
+import AutoHeightWebView from 'react-native-autoheight-webview'
 import {Dimensions} from "react-native";
 
 export default class WebviewKatexComponent extends React.Component {
@@ -9,7 +9,6 @@ export default class WebviewKatexComponent extends React.Component {
         this.state = {
             html: props.html,
             katexWebviewStyles: {
-                height: 50,
                 backgroundColor: 'rgba(255,255,255,0)',
                 ...this.props.katexWebviewStyles,
             },
@@ -25,33 +24,25 @@ export default class WebviewKatexComponent extends React.Component {
         const {html, katexWebviewStyles} = this.state;
         const {useKatexHtmlInject} = this.props;
 
-        if (useKatexHtmlInject) {
-            return (
-                <WebView
-                    source={{html: html}}
-                    automaticallyAdjustContentInsets={false}
-                    scalesPageToFit={false}
-                    scrollEnabled={false}
-                    style={{...this.state.katexWebviewStyles}}
-                    onMessage={(event) => {
-                        const webviewHeight = Number(event.nativeEvent.data);
-                        this.setState({
-                            katexWebviewStyles: {
-                                ...katexWebviewStyles,
-                                height: webviewHeight
-                            }
-                        })
-                    }}
-                    javaScriptEnabled={true}
-                />
-            )
-        }
         return (
-            <HTML
-                baseFontStyle={{fontSize: 20}}
-                html={html}
-                imagesMaxWidth={Dimensions.get("window").width}
+            <AutoHeightWebView
+                source={{html: html}}
+                automaticallyAdjustContentInsets={false}
+                scalesPageToFit={false}
+                scrollEnabled={false}
+                style={{...this.state.katexWebviewStyles}}
+                onMessage={(event) => {
+                    // const webviewHeight = Number(event.nativeEvent.data);
+                    // this.setState({
+                    //     katexWebviewStyles: {
+                    //         ...katexWebviewStyles,
+                    //         height: webviewHeight
+                    //     }
+                    // })
+                }}
+                javaScriptEnabled={true}
             />
         )
+    
     }
 }

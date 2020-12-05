@@ -1,8 +1,9 @@
 import Constants from 'expo-constants';
+import * as Device from 'expo-device';
 import {Platform} from 'react-native';
 import AsyncStorageUtils from "./AsyncStorageUtils";
 
-const isTestPlatform = Constants.isDevice && __DEV__;
+const isTestPlatform = !Constants.isDevice || !Device.isDevice ||  __DEV__ ;
 const isAndroidDevice = Platform.OS === 'android';
 const isIosDevice = Platform.OS === 'ios';
 

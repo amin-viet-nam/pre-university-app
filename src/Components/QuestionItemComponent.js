@@ -67,18 +67,6 @@ export default class QuestionItemComponent extends React.Component {
                         </style>
                     </head> 
                     <body> ${str} </body> 
-                    <script>
-                      function post () {
-                        window.ReactNativeWebView.postMessage(
-                          Math.max(document.documentElement.clientHeight, document.documentElement.scrollHeight, document.body.clientHeight, document.body.scrollHeight)
-                        );
-                      }
-                      var tid = setInterval( function () {
-                             if ( document.readyState !== 'complete' ) return;
-                             clearInterval( tid );       
-                             setTimeout(post, 1);
-                      }, 50 );
-                    </script>
                     </html>`;
     }
 
@@ -108,7 +96,6 @@ export default class QuestionItemComponent extends React.Component {
                     <WebviewKatexComponent
                         html={ask}
                         useKatexHtmlInject={useKatexHtmlInject}
-                        katexWebviewStyles={{height: 70}}
                     />
                     {
                         hasQuestionImage &&
@@ -178,7 +165,6 @@ export default class QuestionItemComponent extends React.Component {
                             <WebviewKatexComponent
                                 html={solutionGuide}
                                 useKatexHtmlInject={useKatexHtmlInject}
-                                katexWebviewStyles={{height: 70}}
                             />
                         </View>
                     }

@@ -13,7 +13,7 @@
         "foregroundImage": "assets/icon.png"
       },
       "useNextNotificationsApi": true,
-      "package": "vn.amin.preuniversityexamination",
+      "package": "vn.amin.preuniversity_examination",
       "googleServicesFile": "assets/google-services.json",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~5670595085"

@@ -21,6 +21,7 @@
     },
     "ios": {
       "bundleIdentifier": "vn.amin.preuniversityexamination",
+      "iconUrl": "assets/icon.png",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~6534096525"
       }

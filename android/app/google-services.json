@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "652459301860",
+    "firebase_url": "https://amin-preuniversity-examination.firebaseio.com",
+    "project_id": "amin-preuniversity-examination",
+    "storage_bucket": "amin-preuniversity-examination.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:652459301860:android:481febc55fc6c300da45f1",
+        "android_client_info": {
+          "package_name": "vn.amin.preuniversity_examination"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "652459301860-m9uuj0hql727rjjgb4ovc3p0n4vomrnq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtJT9f11uspcvcpkSHm6jJIF-9wll1G_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "652459301860-m9uuj0hql727rjjgb4ovc3p0n4vomrnq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

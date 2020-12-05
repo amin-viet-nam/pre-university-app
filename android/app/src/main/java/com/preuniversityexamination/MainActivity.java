@@ -1,4 +1,4 @@
-package com.preuniversityexamination;
+package vn.amin.preuniversity_examination;
 
 import android.os.Bundle;
 

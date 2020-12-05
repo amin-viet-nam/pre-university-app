@@ -9,11 +9,12 @@
       "**/*"
     ],
     "android": {
+      "package": "vn.amin.preuniversity_examination",
+      "icon": "assets/android-icon.png",
       "adaptiveIcon": {
-        "foregroundImage": "assets/icon.png"
+        "foregroundImage": "assets/android-icon.png"
       },
       "useNextNotificationsApi": true,
-      "package": "vn.amin.preuniversity_examination",
       "googleServicesFile": "./assets/google-services.json",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~5670595085"
@@ -21,7 +22,7 @@
     },
     "ios": {
       "bundleIdentifier": "vn.amin.preuniversityexamination",
-      "iconUrl": "assets/icon.png",
+      "icon": "assets/ios-icon.png",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~6534096525"
       }

@@ -49,7 +49,6 @@ export default class AnswerItemComponent extends React.Component {
                     <WebviewKatexComponent
                         html={choice}
                         useKatexHtmlInject={useKatexHtmlInject}
-                        katexWebviewStyles={{height: 50}}
                     />
                 </View>
             </View>

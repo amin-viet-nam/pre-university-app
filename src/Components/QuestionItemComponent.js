@@ -63,6 +63,7 @@ export default class QuestionItemComponent extends React.Component {
                     <head> 
                         <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
                         <style>
+                        body { font-size: 120%; word-wrap: break-word; overflow-wrap: break-word; }
                         ${katexStyle}
                         </style>
                     </head> 

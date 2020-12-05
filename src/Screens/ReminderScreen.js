@@ -1,12 +1,13 @@
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Dimensions, FlatList, Text, View} from 'react-native';
+import {Dimensions, FlatList, Text, View, Button} from 'react-native';
 import {Card} from '@ui-kitten/components';
 import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from 'react-native-vector-icons';
 import NotificationUtils from "../Utils/NotificationUtils";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Platform} from 'react-native';
 
 export default class ReminderScreen extends React.Component {
     constructor(props) {
@@ -22,7 +23,8 @@ export default class ReminderScreen extends React.Component {
                 {id: 6, text: 'Mọi thứ Bảy'},
                 {id: 0, text: 'Mọi Chủ Nhật'},
             ],
-            reminderTime: 0
+            reminderTime: 0,
+            showTimePickerAndroid: false
         }
     }
 
@@ -61,7 +63,7 @@ export default class ReminderScreen extends React.Component {
     }
 
     render() {
-        const {dayInWeekLabels, reminderTime} = this.state;
+        const {dayInWeekLabels, reminderTime, showTimePickerAndroid} = this.state;
         const deviceWidth = Dimensions.get("window").width;
 
         return (
@@ -125,23 +127,35 @@ export default class ReminderScreen extends React.Component {
                 />
                 <View style={{padding: 4}}>
                     <Text style={{fontSize: 20}}>Lúc :</Text>
+                    <Button onPress={() => {
+                        this.setState({
+                            showTimePickerAndroid: true
+                        });
+                    }} title="Chọn giờ" />
                 </View>
-                <View>
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        value={new Date(reminderTime)}
-                        mode={'time'}
-                        is24Hour={true}
-                        display="default"
-                        onChange={(event, selectedDate) => {
-                            this.setState({
-                                reminderTime: selectedDate.getTime()
-                            }, () => {
-                                this.updateAndSaveReminderData();
-                            })
-                        }}
-                    />
-                </View>
+                {
+                    (Platform.OS === 'ios' || showTimePickerAndroid) &&
+                    <View>
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={new Date(reminderTime)}
+                            mode={'time'}
+                            is24Hour={true}
+                            display="default"
+                            onChange={(event, selectedDate) => {
+                                if (selectedDate) {
+                                    this.setState({
+                                        reminderTime: selectedDate.getTime(),
+                                        showTimePickerAndroid: false
+                                    }, () => {
+                                        this.updateAndSaveReminderData();
+                                    })
+                                }
+                            }}
+                        />
+                    </View>
+                }
+                
             </SafeAreaView>
         );
     }

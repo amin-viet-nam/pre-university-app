@@ -10,6 +10,7 @@ export default class WebviewKatexComponent extends React.Component {
             html: props.html,
             katexWebviewStyles: {
                 backgroundColor: 'rgba(255,255,255,0)',
+                width: Dimensions.width,
                 ...this.props.katexWebviewStyles,
             },
         }

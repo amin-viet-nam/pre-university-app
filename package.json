@@ -40,6 +40,7 @@
     "react-native-autoheight-webview": "^1.5.7",
     "react-native-base64": "^0.1.0",
     "react-native-countdown-circle-timer": "^2.3.10",
+    "react-native-device-info": "^7.2.1",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-loading-spinner-overlay": "^1.1.0",
     "react-native-material-ripple": "^0.9.1",

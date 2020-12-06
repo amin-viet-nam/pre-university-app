@@ -6944,6 +6944,11 @@ react-native-countdown-circle-timer@^2.3.10:
   resolved "https://registry.yarnpkg.com/react-native-countdown-circle-timer/-/react-native-countdown-circle-timer-2.3.10.tgz#ce3c1fe86d40808aabc774215510f0c9c7f62b57"
   integrity sha512-PdFarZV93Ju40X3w55+zWiG2MqBjty3/NqgCwvVTCw4dRi2l6s/S5NvAB7eOAeYgcFvYVeqL7kSIVxZ3LUwzSw==
 
+react-native-device-info@^7.2.1:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-7.2.1.tgz#06a71703af744a30a1eb621cf20e95b43b3bbf85"
+  integrity sha512-7zn2cASst13qlSSGsKOhGsPpeX2yV0O69s7o0kc/4E00VqWrlpx241YB09AL2ZerCPsVOPdKcAvXM+wcJ9xQTw==
+
 react-native-gesture-handler@~1.6.0:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"

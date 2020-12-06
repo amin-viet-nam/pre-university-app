@@ -4,13 +4,13 @@
   "expo": {
     "name": "PreUniversityExamination",
     "slug": "PreUniversityExamination",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "assetBundlePatterns": [
       "**/*"
     ],
     "android": {
       "package": "vn.amin.preuniversity_examination",
-      "versionCode": 4,
+      "versionCode": 5,
       "icon": "assets/android-icon.png",
       "adaptiveIcon": {
         "foregroundImage": "assets/android-icon.png"
@@ -32,7 +32,7 @@
     },
     "ios": {
       "bundleIdentifier": "vn.amin.preuniversityexamination",
-      "buildNumber": "1.0.0",
+      "buildNumber": "2.0.0",
       "icon": "assets/ios-icon.png",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~6534096525"

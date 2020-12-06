@@ -10,6 +10,8 @@
     ],
     "android": {
       "package": "vn.amin.preuniversity_examination",
+      "versionCode": 4,
+      "versionName": "1.0.0",
       "icon": "assets/android-icon.png",
       "adaptiveIcon": {
         "foregroundImage": "assets/android-icon.png"
@@ -18,10 +20,20 @@
       "googleServicesFile": "./assets/google-services.json",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~5670595085"
-      }
+      },
+      "permissions":  [
+        "INTERNET",
+        "SYSTEM_ALERT_WINDOW",
+        "MANAGE_DOCUMENTS",
+        "READ_INTERNAL_STORAGE",
+        "VIBRATE",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR"
+        ]
     },
     "ios": {
       "bundleIdentifier": "vn.amin.preuniversityexamination",
+      "buildNumber": "1.0.0",
       "icon": "assets/ios-icon.png",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~6534096525"

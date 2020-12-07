@@ -1,9 +1,7 @@
 {
-  "name": "PreUniversityExamination",
-  "displayName": "PreUniversityExamination",
   "expo": {
-    "name": "PreUniversityExamination",
-    "slug": "PreUniversityExamination",
+    "name": "Amin Luyện Thi THPT",
+    "slug": "pre-university-examination",
     "version": "2.0.0",
     "assetBundlePatterns": [
       "**/*"

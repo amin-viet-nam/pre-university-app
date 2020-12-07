@@ -75,14 +75,6 @@ export default class App extends Component {
 
     async componentDidMount() {
         await this.checkNewCode();
-        AsyncStorage.getItem('user_reminder')
-            .then((rawData) => {
-                if (rawData === null) {
-                    const selectedDayInWeek = [1, 2, 4, 5];
-                    const reminderTime = 38700000;
-                    NotificationUtils.SaveAndUpdateReminderData(selectedDayInWeek, reminderTime);
-                }
-            })
 
         const notificationListener = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
@@ -144,7 +136,7 @@ export default class App extends Component {
         }
 
         if (Platform.OS === 'android') {
-            Notifications.setNotificationChannelAsync('default', {
+            await Notifications.setNotificationChannelAsync('default', {
                 name: 'default',
                 importance: Notifications.AndroidImportance.MAX,
                 vibrationPattern: [0, 250, 250, 250],
@@ -152,6 +144,14 @@ export default class App extends Component {
             });
         }
 
+        await AsyncStorage.getItem('user_reminder')
+            .then((rawData) => {
+                if (rawData === null) {
+                    const selectedDayInWeek = [1, 2, 4, 5];
+                    const reminderTime = 38700000;
+                    NotificationUtils.SaveAndUpdateReminderData(selectedDayInWeek, reminderTime);
+                }
+            })
         return token;
     }
 

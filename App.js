@@ -1,5 +1,6 @@
 import {AppLoading} from 'expo';
 import Constants from 'expo-constants';
+import * as Updates from 'expo-updates';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 import firebase from './src/DataStorages/FirebaseApp';
@@ -48,7 +49,32 @@ export default class App extends Component {
         }
     };
 
+
+    async checkNewCode() {
+        try {
+            if (!__DEV__) {
+                const update = await Updates.checkForUpdateAsync();
+                if (update.isAvailable) {
+                    await Updates.fetchUpdateAsync();
+                    await Updates.reloadAsync()
+                        .then(value => {
+                            this.setState({
+                                loading: false
+                            })
+                        })
+                }
+            }
+        } catch (e) {
+            // handle or log error
+            console.log(e);
+            this.setState({
+                loading: false
+            })
+        }
+    }
+
     async componentDidMount() {
+        await this.checkNewCode();
         AsyncStorage.getItem('user_reminder')
             .then((rawData) => {
                 if (rawData === null) {

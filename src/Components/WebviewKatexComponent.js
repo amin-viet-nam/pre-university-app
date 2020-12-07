@@ -32,15 +32,6 @@ export default class WebviewKatexComponent extends React.Component {
                 scalesPageToFit={false}
                 scrollEnabled={false}
                 style={{...this.state.katexWebviewStyles}}
-                onMessage={(event) => {
-                    // const webviewHeight = Number(event.nativeEvent.data);
-                    // this.setState({
-                    //     katexWebviewStyles: {
-                    //         ...katexWebviewStyles,
-                    //         height: webviewHeight
-                    //     }
-                    // })
-                }}
                 javaScriptEnabled={true}
             />
         )

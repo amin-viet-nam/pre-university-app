@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {FlatList, ScrollView, Text, View} from 'react-native';
+import {FlatList, Text, View} from 'react-native';
 import {Card} from '@ui-kitten/components';
 import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from 'react-native-vector-icons';
@@ -79,7 +79,7 @@ export default class CategoryScreen extends React.Component {
                         bannerSize="mediumRectangle"
                         adUnitID={AdmobUtils.bannerAds}
                         onDidFailToReceiveAdWithError={(err) => {
-                            console.error('load banner ads error', err)
+                            console.log('load banner ads error', err)
                         }}/>
                 </View>
             );
@@ -91,10 +91,10 @@ export default class CategoryScreen extends React.Component {
         const {categoryList} = this.state;
         return (
             <SafeAreaView style={{justifyContent: 'center', flex: 1, padding: 4, backgroundColor: '#f8bbd0'}}>
-                <ScrollView>
-                    {this.renderAdmob()}
+                <View>
                     <FlatList
-                        scrollEnabled={false}
+
+                        ListHeaderComponent={this.renderAdmob()}
                         data={categoryList}
                         numColumns={2}
                         keyExtractor={(item, index) => `category-item-${index}`}
@@ -123,7 +123,7 @@ export default class CategoryScreen extends React.Component {
                             </View>
                         )}
                     />
-                </ScrollView>
+                </View>
             </SafeAreaView>
         );
     }

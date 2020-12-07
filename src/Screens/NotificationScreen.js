@@ -1,7 +1,17 @@
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ActivityIndicator, FlatList, ItemSeparatorView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+    ActivityIndicator,
+    Dimensions,
+    FlatList,
+    ItemSeparatorView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from 'react-native';
 import firebase from '../../src/DataStorages/FirebaseApp';
+import AutoHeightWebView from "react-native-autoheight-webview";
 
 const styles = StyleSheet.create({
     container: {
@@ -41,8 +51,8 @@ export default class NotificationScreen extends React.Component {
             dataSource: [{
                 id: -1,
                 title: 'Cảm ơn bạn đã tải ứng dụng Amin luyện thi THPT',
-                content: 'Cảm ơn bạn đã tải ứng dụng Amin luyện thi THPT',
-                date: -(new Date().getTime())
+                content: `Amin là một trong những ứng dụng luyện thi THPT Quốc Gia tại Việt Nam.<br><br> Nền tảng miễn phí này cho phép học sinh tự trao dồi kiến thức của mình dựa trên bộ sưu tập những câu hỏi trắc nghiệm từ nhiều nguồn dữ liệu khác nhau .<br><br> Amin luyện thi THPT giúp bạn dễ dàng đạt được kết quả tốt trong kỳ thi THPT sắp tới .<br><br>Với kho đề thi phong phú, tất cả đều có đáp án, lời giải chi tiết. Được cập nhật liên tục và chọn lọc từ các trường và thầy cô trên cả nước. <br>Kho tài liệu đầy đủ phục vụ các bạn Luyện thi mọi lúc mọi nơi. <br>Ứng dụng đơn giản, dễ sử dụng. <br>Đầy đủ các môn và phần thi có trắc nghiệm <br>Chế độ thi thật với thời gian thực và bài thi sẽ được tự động chấm điểm sau khi nộp bài. <br><br> Bộ câu hỏi quý giá này đều do các thầy cô giáo luyện thi nổi tiếng trực tiếp biên soạn, có nội dung bám sát theo chương trình thi TNPTQG hiện hành, cực kỳ đầy đủ và chi tiết.`,
+                reverseDate: 0
             }],
             loading: true,
             size: 2,
@@ -139,7 +149,15 @@ export default class NotificationScreen extends React.Component {
                             return (
                                 <View style={styles.itemStyle}>
                                     <Text style={{fontSize: 20}}>{item.title}</Text>
-                                    <Text>{item.content}</Text>
+
+                                    <AutoHeightWebView
+                                        source={{html: item.content}}
+                                        automaticallyAdjustContentInsets={false}
+                                        scalesPageToFit={false}
+                                        scrollEnabled={false}
+                                        style={{backgroundColor: 'rgba(255,255,255,0)', width: Dimensions.width}}
+                                        javaScriptEnabled={true}
+                                    />
                                     <View
                                         style={{
                                             marginTop: 4,

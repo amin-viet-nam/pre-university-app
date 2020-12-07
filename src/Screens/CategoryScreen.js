@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {FlatList, Text, View, ScrollView} from 'react-native';
+import {FlatList, ScrollView, Text, View} from 'react-native';
 import {Card} from '@ui-kitten/components';
 import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from 'react-native-vector-icons';
@@ -12,6 +12,7 @@ export default class CategoryScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            showBannerAds: false,
             categoryList: [{
                 "id": "math",
                 "icon": "math-compass",
@@ -52,25 +53,37 @@ export default class CategoryScreen extends React.Component {
         }
     }
 
+    componentDidMount() {
+        AdmobUtils.shouldShowBannerAds().then(ok => {
+            this.setState({
+                showBannerAds: ok
+            })
+        });
+    }
+
     categoryItemOnClick(item) {
         console.log('categoryItemOnClick: ', item);
         NavigatorService.navigate('CategoryDetailScreen', {item});
     }
 
     renderAdmob() {
-        console.log(AdmobUtils);
-        AdmobUtils.shouldShowBannerAds().then(ok => {
-            if (ok) {
-                return (
+        const {showBannerAds} = this.state;
+        if (showBannerAds) {
+            return (
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
                     <AdMobBanner
-                        bannerSize="fullBanner"
+                        bannerSize="mediumRectangle"
                         adUnitID={AdmobUtils.bannerAds}
                         onDidFailToReceiveAdWithError={(err) => {
                             console.error('load banner ads error', err)
-                        }} />
-                );
-            }
-        })
+                        }}/>
+                </View>
+            );
+        }
         return (<View/>);
     }
 
@@ -100,7 +113,8 @@ export default class CategoryScreen extends React.Component {
                                             elevation: 5,
                                         }}
                                     >
-                                        <MaterialCommunityIcons name={item.icon} size={50} style={{textAlign: 'center'}}/>
+                                        <MaterialCommunityIcons name={item.icon} size={50}
+                                                                style={{textAlign: 'center'}}/>
                                         <Text style={{fontSize: 20, textAlign: 'center'}}>
                                             {item.text}
                                         </Text>
@@ -109,7 +123,6 @@ export default class CategoryScreen extends React.Component {
                             </View>
                         )}
                     />
-                    {this.renderAdmob()}
                 </ScrollView>
             </SafeAreaView>
         );

@@ -18,7 +18,7 @@
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~5670595085"
       },
-      "permissions":  [
+      "permissions": [
         "INTERNET",
         "SYSTEM_ALERT_WINDOW",
         "MANAGE_DOCUMENTS",
@@ -26,7 +26,7 @@
         "VIBRATE",
         "READ_CALENDAR",
         "WRITE_CALENDAR"
-        ]
+      ]
     },
     "ios": {
       "bundleIdentifier": "vn.amin.preuniversityexamination",
@@ -35,6 +35,19 @@
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~6534096525"
       }
+    },
+    "extra": {
+      "bugsnag": {
+        "apiKey": "eaa3ca10053720e56dc263fac0ee801c"
+      }
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "@bugsnag/expo/hooks/post-publish.js",
+          "config": {}
+        }
+      ]
     }
   }
 }

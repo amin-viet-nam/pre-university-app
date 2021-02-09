@@ -1,3 +1,6 @@
+import Bugsnag from '@bugsnag/expo';
+Bugsnag.start();
+
 import {AppLoading} from 'expo';
 import Constants from 'expo-constants';
 import * as Updates from 'expo-updates';
@@ -87,7 +90,7 @@ export default class App extends Component {
         Notifications.removeNotificationSubscription(notificationListener);
         Notifications.removeNotificationSubscription(responseListener);
 
-        this.anonymousFirebaseLogin();
+        this.setState({...this.state, isReady: true});
     }
 
     anonymousFirebaseLogin() {

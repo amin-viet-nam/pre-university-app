@@ -1,13 +1,12 @@
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Dimensions, FlatList, Text, View, Button} from 'react-native';
+import {Button, Dimensions, FlatList, Platform, Text, View} from 'react-native';
 import {Card} from '@ui-kitten/components';
 import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from 'react-native-vector-icons';
 import NotificationUtils from "../Utils/NotificationUtils";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Platform} from 'react-native';
 
 export default class ReminderScreen extends React.Component {
     constructor(props) {
@@ -127,11 +126,15 @@ export default class ReminderScreen extends React.Component {
                 />
                 <View style={{padding: 4}}>
                     <Text style={{fontSize: 20}}>Lúc :</Text>
-                    <Button onPress={() => {
-                        this.setState({
-                            showTimePickerAndroid: true
-                        });
-                    }} title="Chọn giờ" />
+                    {
+                        (Platform.OS === 'android') &&
+
+                        <Button onPress={() => {
+                            this.setState({
+                                showTimePickerAndroid: true
+                            });
+                        }} title="Chọn giờ"/>
+                    }
                 </View>
                 {
                     (Platform.OS === 'ios' || showTimePickerAndroid) &&
@@ -141,7 +144,7 @@ export default class ReminderScreen extends React.Component {
                             value={new Date(reminderTime)}
                             mode={'time'}
                             is24Hour={true}
-                            display="default"
+                            display="spinner"
                             onChange={(event, selectedDate) => {
                                 if (selectedDate) {
                                     this.setState({
@@ -155,7 +158,7 @@ export default class ReminderScreen extends React.Component {
                         />
                     </View>
                 }
-                
+
             </SafeAreaView>
         );
     }

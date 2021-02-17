@@ -1,7 +1,4 @@
 import Bugsnag from '@bugsnag/expo';
-Bugsnag.start();
-
-import {AppLoading} from 'expo';
 import Constants from 'expo-constants';
 import * as Updates from 'expo-updates';
 import * as Notifications from 'expo-notifications';
@@ -9,7 +6,7 @@ import * as Permissions from 'expo-permissions';
 import firebase from './src/DataStorages/FirebaseApp';
 
 import React, {Component} from 'react';
-import {Alert, StatusBar} from 'react-native';
+import {StatusBar} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import * as eva from '@eva-design/eva';
 import {ApplicationProvider} from '@ui-kitten/components';
@@ -77,6 +74,7 @@ export default class App extends Component {
     }
 
     async componentDidMount() {
+        await Bugsnag.start();
         await this.checkNewCode();
 
         const notificationListener = Notifications.addNotificationReceivedListener(notification => {
@@ -91,9 +89,12 @@ export default class App extends Component {
         Notifications.removeNotificationSubscription(responseListener);
 
         this.setState({...this.state, isReady: true});
+
+        this.anonymousFirebaseLogin();
     }
 
     anonymousFirebaseLogin() {
+
         firebase.auth().signInAnonymously()
             .then((auth) => {
                 this.setState({...this.state, isReady: true}, () => {
@@ -107,11 +108,12 @@ export default class App extends Component {
                     });
                 });
             })
-            .catch(function (error) {
+            .catch((error) => {
                 var errorCode = error.code;
                 var errorMessage = error.message;
                 Alert.alert(`Xảy ra lỗi', 'Đã xảy ra lỗi khi xác thực người dùng, mã lỗi : ${errorCode} - ${errorMessage}`);
 
+                console.error(error);
                 setTimeout(() => {
                     this.anonymousFirebaseLogin()
                 }, 5000)
@@ -159,9 +161,6 @@ export default class App extends Component {
     }
 
     render() {
-        if (!this.state.isReady) {
-            return <AppLoading/>;
-        }
         return (
             <ApplicationProvider {...eva} theme={eva.light}>
                 <SafeAreaProvider>

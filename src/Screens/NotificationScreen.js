@@ -13,7 +13,7 @@ import {
 import firebase from '../../src/DataStorages/FirebaseApp';
 import AutoHeightWebView from "react-native-autoheight-webview";
 
-const styles = StyleSheet.create({
+const styles = {
     container: {
         justifyContent: 'center',
         flex: 1,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     itemStyle: {
         marginTop: 20
     }
-});
+};
 
 
 export default class NotificationScreen extends React.Component {

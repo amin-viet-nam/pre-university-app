@@ -1,12 +1,13 @@
-import React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
 import {FlatList, Text, View} from 'react-native';
+
+import {AdMobBanner} from "expo-ads-admob";
+import AdmobUtils from "../Utils/AdmobUtils";
 import {Card} from '@ui-kitten/components';
-import Ripple from 'react-native-material-ripple';
 import {MaterialCommunityIcons} from 'react-native-vector-icons';
 import NavigatorService from '../../src/Services/NavigatorService';
-import AdmobUtils from "../Utils/AdmobUtils";
-import {AdMobBanner} from "expo-ads-admob";
+import React from 'react';
+import Ripple from 'react-native-material-ripple';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default class CategoryScreen extends React.Component {
     constructor(props) {
@@ -93,7 +94,6 @@ export default class CategoryScreen extends React.Component {
             <SafeAreaView style={{justifyContent: 'center', flex: 1, padding: 4, backgroundColor: '#f8bbd0'}}>
                 <View>
                     <FlatList
-
                         ListHeaderComponent={this.renderAdmob()}
                         data={categoryList}
                         numColumns={2}

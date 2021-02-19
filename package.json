@@ -10,7 +10,8 @@
   "dependencies": {
     "@bugsnag/expo": "7.5.5",
     "@eva-design/eva": "^2.0.0",
-    "@react-native-async-storage/async-storage": "^1.13.2",
+    "@react-native-async-storage/async-storage": "^1.13.4",
+    "@react-native-community/async-storage": "~1.12.0",
     "@react-native-community/cameraroll": "^4.0.0",
     "@react-native-community/datetimepicker": "3.0.4",
     "@react-native-community/masked-view": "0.1.10",
@@ -37,7 +38,7 @@
     "moment": "^2.29.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-native": "0.63.4",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-autoheight-webview": "^1.5.7",
     "react-native-base64": "^0.1.0",
     "react-native-countdown-circle-timer": "^2.3.10",
@@ -50,6 +51,7 @@
     "react-native-screens": "~2.15.2",
     "react-native-svg": "12.1.0",
     "react-native-unimodules": "~0.12.0",
+    "react-native-web": "^0.15.0",
     "react-native-webview": "11.0.0"
   },
   "devDependencies": {

@@ -1,12 +1,12 @@
-import React from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Button, Dimensions, FlatList, Platform, Text, View} from 'react-native';
+import AsyncStorage, {Button, Dimensions, FlatList, Platform, Text, View} from 'react-native';
+
 import {Card} from '@ui-kitten/components';
-import Ripple from 'react-native-material-ripple';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {MaterialCommunityIcons} from 'react-native-vector-icons';
 import NotificationUtils from "../Utils/NotificationUtils";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import Ripple from 'react-native-material-ripple';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default class ReminderScreen extends React.Component {
     constructor(props) {

@@ -1,30 +1,27 @@
-import Bugsnag from '@bugsnag/expo';
-import Constants from 'expo-constants';
-import * as Updates from 'expo-updates';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
-import firebase from './src/DataStorages/FirebaseApp';
-
-import React, {Component} from 'react';
-import {StatusBar} from 'react-native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
+import * as Updates from 'expo-updates';
 import * as eva from '@eva-design/eva';
-import {ApplicationProvider} from '@ui-kitten/components';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Spinner from 'react-native-loading-spinner-overlay';
-import {AppContext} from './src/Contexts/AppContext';
 
-import NavigatorService from './src/Services/NavigatorService';
-import NotificationUtils from "./src/Utils/NotificationUtils";
-
-import HomeScreen from './src/Screens/HomeScreen';
-import CategoryScreen from './src/Screens/CategoryScreen';
-import CategoryDetailScreen from './src/Screens/CategoryDetailScreen';
-import QuestionScreen from './src/Screens/QuestionScreen';
+import AsyncStorage, {StatusBar} from 'react-native';
+import React, {Component} from 'react';
 
 import AboutMeScreen from './src/Screens/AboutMeScreen';
+import {AppContext} from './src/Contexts/AppContext';
+import {ApplicationProvider} from '@ui-kitten/components';
+import Bugsnag from '@bugsnag/expo';
+import CategoryDetailScreen from './src/Screens/CategoryDetailScreen';
+import CategoryScreen from './src/Screens/CategoryScreen';
+import Constants from 'expo-constants';
+import HomeScreen from './src/Screens/HomeScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import NavigatorService from './src/Services/NavigatorService';
+import NotificationUtils from "./src/Utils/NotificationUtils";
+import QuestionScreen from './src/Screens/QuestionScreen';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import Spinner from 'react-native-loading-spinner-overlay';
+import {createStackNavigator} from '@react-navigation/stack';
+import firebase from './src/DataStorages/FirebaseApp';
 
 const Stack = createStackNavigator();
 

@@ -1,6 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import moment from "moment";
 import * as Notifications from "expo-notifications";
+
+import AsyncStorage from "react-native";
+import moment from "moment";
 
 export default {
     SaveAndUpdateReminderData: (selectedDayInWeek, reminderTime) => {

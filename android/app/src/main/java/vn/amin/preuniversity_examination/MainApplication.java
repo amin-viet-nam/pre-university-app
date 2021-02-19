@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.ibits.react_native_in_app_review.AppReviewPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;

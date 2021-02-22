@@ -6,6 +6,7 @@ import android.net.Uri;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.ibits.react_native_in_app_review.AppReviewPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -51,6 +52,11 @@ public class MainApplication extends Application implements ReactApplication {
       packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
       packages.add(new AppReviewPackage());
       packages.add(new AsyncStoragePackage());
+      packages.add(new VectorIconsPackage());
+      packages.add(new RNCardViewPackage());
+      packages.add(new ConstantsPackage());
+      packages.add(new PermissionsPackage());
+      packages.add(new FileSystemPackage());
       return packages;
     }
 

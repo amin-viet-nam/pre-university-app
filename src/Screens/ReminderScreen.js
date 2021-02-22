@@ -1,4 +1,4 @@
-import AsyncStorage, {Button, Dimensions, FlatList, Platform, Text, View} from 'react-native';
+import {Button, Dimensions, FlatList, Platform, Text, View, AsyncStorage} from 'react-native';
 
 import {Card} from '@ui-kitten/components';
 import DateTimePicker from '@react-native-community/datetimepicker';

@@ -1,4 +1,4 @@
-import AsyncStorage from "react-native";
+import {AsyncStorage} from "react-native";
 
 function getItemObject(key) {
     return AsyncStorage.getItem(key)

@@ -3,7 +3,7 @@ import * as Permissions from 'expo-permissions';
 import * as Updates from 'expo-updates';
 import * as eva from '@eva-design/eva';
 
-import AsyncStorage, {StatusBar} from 'react-native';
+import {AsyncStorage, StatusBar} from 'react-native';
 import React, {Component} from 'react';
 
 import AboutMeScreen from './src/Screens/AboutMeScreen';

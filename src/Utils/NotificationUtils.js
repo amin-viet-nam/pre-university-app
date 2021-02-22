@@ -1,6 +1,6 @@
 import * as Notifications from "expo-notifications";
 
-import AsyncStorage from "react-native";
+import {AsyncStorage} from "react-native";
 import moment from "moment";
 
 export default {

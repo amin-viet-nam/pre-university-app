@@ -50,6 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
       packages.add(new AppReviewPackage());
+      packages.add(new AsyncStoragePackage());
       return packages;
     }
 

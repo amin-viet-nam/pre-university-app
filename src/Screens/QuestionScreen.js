@@ -1,7 +1,7 @@
 import React from 'react';
 import {Alert, Dimensions, FlatList, Text, View} from 'react-native';
 import Ripple from 'react-native-material-ripple';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
+import {MaterialCommunityIcons} from 'react-native-vector-icons';
 import base64 from 'react-native-base64'
 import {AppContext} from '../Contexts/AppContext';
 import firebase from '../DataStorages/FirebaseApp';

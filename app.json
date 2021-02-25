@@ -18,7 +18,7 @@
     ],
     "android": {
       "package": "vn.amin.preuniversity_examination",
-      "versionCode": 8,
+      "versionCode": 10,
       "icon": "assets/android-icon.png",
       "adaptiveIcon": {
         "foregroundImage": "assets/android-icon.png",
@@ -41,7 +41,7 @@
     },
     "ios": {
       "bundleIdentifier": "vn.amin.preuniversityexamination",
-      "buildNumber": "2.2.0",
+      "buildNumber": "2.4.0",
       "icon": "assets/ios-icon.png",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~6534096525"

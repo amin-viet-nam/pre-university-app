@@ -2,7 +2,7 @@
   "expo": {
     "name": "Amin Luyện Thi THPT",
     "slug": "pre-university-examination",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "icon": "./assets/icon.png",
     "sdkVersion": "40.0.0",
     "splash": {
@@ -18,7 +18,7 @@
     ],
     "android": {
       "package": "vn.amin.preuniversity_examination",
-      "versionCode": 6,
+      "versionCode": 8,
       "icon": "assets/android-icon.png",
       "adaptiveIcon": {
         "foregroundImage": "assets/android-icon.png",
@@ -41,7 +41,7 @@
     },
     "ios": {
       "bundleIdentifier": "vn.amin.preuniversityexamination",
-      "buildNumber": "2.1.0",
+      "buildNumber": "2.2.0",
       "icon": "assets/ios-icon.png",
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-3943461823819564~6534096525"

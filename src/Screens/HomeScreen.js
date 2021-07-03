@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import CategoryScreen from './CategoryScreen';
 import NotificationScreen from './NotificationScreen';
 import ReminderScreen from './ReminderScreen';

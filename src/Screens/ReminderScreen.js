@@ -2,7 +2,7 @@ import {Button, Dimensions, FlatList, Platform, Text, View, AsyncStorage} from '
 
 import {Card} from '@ui-kitten/components';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import NotificationUtils from "../Utils/NotificationUtils";
 import React from 'react';
 import Ripple from 'react-native-material-ripple';

@@ -3,7 +3,7 @@ import {FlatList, Text, View} from 'react-native';
 import {AdMobBanner} from "expo-ads-admob";
 import AdmobUtils from "../Utils/AdmobUtils";
 import {Card} from '@ui-kitten/components';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import NavigatorService from '../../src/Services/NavigatorService';
 import React from 'react';
 import Ripple from 'react-native-material-ripple';
